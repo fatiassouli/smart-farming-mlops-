@@ -46,40 +46,6 @@ Transformer le prototype en une **solution industrielle complète** en appliquan
 
 ---
 
-## 🏗️ Architecture cible
-┌─────────────────────────────────────────────────────────────────────┐
-│ SMART FARMING MLOps │
-├─────────────────────────────────────────────────────────────────────┤
-│ │
-│ 📊 Kaggle / FAO │
-│ │ │
-│ ▼ │
-│ 🔄 dlt (Ingestion automatisée) │
-│ │ │
-│ ▼ │
-│ 🗄️ DuckDB (Stockage local) │
-│ │ │
-│ ▼ │
-│ 🔧 dbt (Transformation) │
-│ │ │
-│ ▼ │
-│ 🤖 Modèles ML (Scikit-learn) │
-│ │ │
-│ ▼ │
-│ 📈 MLflow (Tracking & Registry) │
-│ │ │
-│ ▼ │
-│ 🌐 FastAPI (API REST) │
-│ │ │
-│ ▼ │
-│ 🐳 Docker (Conteneurisation) │
-│ │ │
-│ ▼ │
-│ 🚀 GitHub Actions (CI/CD) │
-│ │
-└─────────────────────────────────────────────────────────────────────┘
-
----
 
 ## 📊 Bénéfices attendus
 
