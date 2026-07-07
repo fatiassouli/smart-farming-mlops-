@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-07-07T22:33:47.751868+00:00",
+  "overall_status": "PASS",
+  "pytest": {
+    "passed": true,
+    "returncode": 0
+  },
+  "contracts": {
+    "yield": {
+      "dataset": "yield",
+      "n_rows": 56717,
+      "is_valid": true,
+      "n_violations": 0,
+      "violations": []
+    },
+    "crop_recommendation": {
+      "dataset": "crop_recommendation",
+      "n_rows": 2200,
+      "is_valid": true,
+      "n_violations": 0,
+      "violations": []
+    }
+  },
+  "pytest_stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.12.1, pytest-9.1.1, pluggy-1.6.0 -- /home/codespace/.python/current/bin/python\ncachedir: .pytest_cache\nrootdir: /workspaces/smart-farming-mlops-\nconfigfile: pyproject.toml\nplugins: anyio-4.12.1, typeguard-4.5.2\ncollecting ... collected 43 items\n\ntests/test_completeness.py::test_yield_columns_present PASSED            [  2%]\ntests/test_completeness.py::test_yield_no_missing_values PASSED          [  4%]\ntests/test_completeness.py::test_yield_min_row_count PASSED              [  6%]\ntests/test_completeness.py::test_yield_no_empty_dataframe PASSED         [  9%]\ntests/test_completeness.py::test_crop_columns_present PASSED             [ 11%]\ntests/test_completeness.py::test_crop_no_missing_values PASSED           [ 13%]\ntests/test_completeness.py::test_crop_min_row_count PASSED               [ 16%]\ntests/test_completeness.py::test_crop_no_empty_dataframe PASSED          [ 18%]\ntests/test_consistency.py::test_yield_constant_columns PASSED            [ 20%]\ntests/test_consistency.py::test_yield_year_equals_year_code PASSED       [ 23%]\ntests/test_consistency.py::test_yield_no_duplicate_key PASSED            [ 25%]\ntests/test_consistency.py::test_yield_area_code_area_mapping_stable PASSED [ 27%]\ntests/test_consistency.py::test_yield_item_code_item_mapping_stable PASSED [ 30%]\ntests/test_consistency.py::test_crop_no_full_duplicate_rows PASSED       [ 32%]\ntests/test_consistency.py::test_crop_classes_are_balanced PASSED         [ 34%]\ntests/test_consistency.py::test_crop_all_labels_present PASSED           [ 37%]\ntests/test_validity.py::test_yield_numeric_dtype[Area Code] PASSED       [ 39%]\ntests/test_validity.py::test_yield_numeric_dtype[Element Code] PASSED    [ 41%]\ntests/test_validity.py::test_yield_numeric_dtype[Item Code] PASSED       [ 44%]\ntests/test_validity.py::test_yield_numeric_dtype[Year Code] PASSED       [ 46%]\ntests/test_validity.py::test_yield_numeric_dtype[Year] PASSED            [ 48%]\ntests/test_validity.py::test_yield_numeric_dtype[Value] PASSED           [ 51%]\ntests/test_validity.py::test_yield_value_range PASSED                    [ 53%]\ntests/test_validity.py::test_yield_year_range PASSED                     [ 55%]\ntests/test_validity.py::test_yield_item_allowed_values PASSED            [ 58%]\ntests/test_validity.py::test_yield_unit_allowed_values PASSED            [ 60%]\ntests/test_validity.py::test_yield_no_negative_value PASSED              [ 62%]\ntests/test_validity.py::test_crop_integer_dtype[N] PASSED                [ 65%]\ntests/test_validity.py::test_crop_integer_dtype[P] PASSED                [ 67%]\ntests/test_validity.py::test_crop_integer_dtype[K] PASSED                [ 69%]\ntests/test_validity.py::test_crop_float_dtype[temperature] PASSED        [ 72%]\ntests/test_validity.py::test_crop_float_dtype[humidity] PASSED           [ 74%]\ntests/test_validity.py::test_crop_float_dtype[ph] PASSED                 [ 76%]\ntests/test_validity.py::test_crop_float_dtype[rainfall] PASSED           [ 79%]\ntests/test_validity.py::test_crop_value_ranges[N] PASSED                 [ 81%]\ntests/test_validity.py::test_crop_value_ranges[P] PASSED                 [ 83%]\ntests/test_validity.py::test_crop_value_ranges[K] PASSED                 [ 86%]\ntests/test_validity.py::test_crop_value_ranges[temperature] PASSED       [ 88%]\ntests/test_validity.py::test_crop_value_ranges[humidity] PASSED          [ 90%]\ntests/test_validity.py::test_crop_value_ranges[ph] PASSED                [ 93%]\ntests/test_validity.py::test_crop_value_ranges[rainfall] PASSED          [ 95%]\ntests/test_validity.py::test_crop_label_allowed_values PASSED            [ 97%]\ntests/test_validity.py::test_crop_ph_is_physically_plausible PASSED      [100%]\n\n============================== 43 passed in 0.25s ==============================\n"
+}

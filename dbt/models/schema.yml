@@ -1,0 +1,255 @@
+version: 2
+
+models:
+  # ==========================================================================
+  # STAGING: yield.csv (FAOSTAT)
+  # ==========================================================================
+  - name: stg_yield
+    description: "Données brutes FAOSTAT - rendements agricoles par pays/culture/année"
+    columns:
+      - name: domain_code
+        description: "Code domaine FAO (constante: QC)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['QC']
+      
+      - name: domain
+        description: "Domaine (constante: Crops)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Crops']
+      
+      - name: area_code
+        description: "Code pays FAO"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_area')
+              field: area_code
+      
+      - name: area
+        description: "Nom du pays"
+        tests:
+          - not_null
+      
+      - name: element_code
+        description: "Code élément (constante)"
+        tests:
+          - not_null
+      
+      - name: element
+        description: "Type de donnée (constante: Yield)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Yield']
+      
+      - name: item_code
+        description: "Code culture"
+        tests:
+          - not_null
+      
+      - name: item
+        description: "Nom de la culture"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'Maize'
+                - 'Potatoes'
+                - 'Rice, paddy'
+                - 'Wheat'
+                - 'Sorghum'
+                - 'Soybeans'
+                - 'Cassava'
+                - 'Yams'
+                - 'Sweet potatoes'
+                - 'Plantains and others'
+      
+      - name: year_code
+        description: "Code année"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1961
+              max_value: 2016
+      
+      - name: year
+        description: "Année de récolte"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1961
+              max_value: 2016
+      
+      - name: unit
+        description: "Unité de mesure (constante: hg/ha)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['hg/ha']
+      
+      - name: value
+        description: "Rendement en hectogrammes par hectare"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 2000000
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - area_code
+            - item_code
+            - year_code
+      
+      - dbt_utils.expression_is_true:
+          expression: "year = year_code"
+
+  # ==========================================================================
+  # STAGING: Crop_recommendation.csv (Kaggle)
+  # ==========================================================================
+  - name: stg_crop_recommendation
+    description: "Données Kaggle - recommandation de culture selon paramètres agro-climatiques"
+    columns:
+      - name: n
+        description: "Azote (N) dans le sol"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 140
+      
+      - name: p
+        description: "Phosphore (P) dans le sol"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 5
+              max_value: 145
+      
+      - name: k
+        description: "Potassium (K) dans le sol"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 5
+              max_value: 205
+      
+      - name: temperature
+        description: "Température en degrés Celsius"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 8.0
+              max_value: 45.0
+      
+      - name: humidity
+        description: "Humidité relative en %"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 14.0
+              max_value: 100.0
+      
+      - name: ph
+        description: "pH du sol"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 3.5
+              max_value: 10.0
+      
+      - name: rainfall
+        description: "Pluviométrie en mm"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 20.0
+              max_value: 300.0
+      
+      - name: label
+        description: "Culture recommandée"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'rice'
+                - 'maize'
+                - 'chickpea'
+                - 'kidneybeans'
+                - 'pigeonpeas'
+                - 'mothbeans'
+                - 'mungbean'
+                - 'blackgram'
+                - 'lentil'
+                - 'pomegranate'
+                - 'banana'
+                - 'mango'
+                - 'grapes'
+                - 'watermelon'
+                - 'muskmelon'
+                - 'apple'
+                - 'orange'
+                - 'papaya'
+                - 'coconut'
+                - 'cotton'
+                - 'jute'
+                - 'coffee'
+
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "ph >= 0 AND ph <= 14"
+          meta:
+            description: "Le pH doit être physiquement plausible (0-14)"
+
+  # ==========================================================================
+  # MART: Agrégations et features
+  # ==========================================================================
+  - name: mart_yield_by_country
+    description: "Rendements agricoles agrégés par pays et année"
+    columns:
+      - name: area
+        tests:
+          - not_null
+      
+      - name: year
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1961
+              max_value: 2016
+      
+      - name: avg_yield
+        description: "Rendement moyen (hg/ha)"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: mart_crop_recommendation_features
+    description: "Features normalisées pour le modèle de recommandation"
+    columns:
+      - name: n_normalized
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      
+      - name: p_normalized
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      
+      - name: k_normalized
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1

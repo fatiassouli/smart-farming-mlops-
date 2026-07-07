@@ -1,0 +1,160 @@
+# ==============================================================================
+# data_contracts.yml
+# Data Contracts formels pour les jeux de données du projet SeismicPredict /
+# module Data Quality. Ce fichier est la référence unique consommée par
+# contract_validator.py et pipeline_validator.py.
+# ==============================================================================
+
+version: 1.0
+generated_from: data_quality/tests/schemas.py
+
+contracts:
+
+  # ----------------------------------------------------------------------
+  - dataset: yield
+    file: data/raw/yield.csv          # ← CORRIGÉ : data/ → data/raw/
+    description: >
+      Rendements agricoles (hg/ha) par pays, culture et année,
+      source FAOSTAT (1961-2016).
+    owner: data-team
+    sla:
+      min_rows: 50000
+      max_null_ratio: 0.0
+      freshness_days: null
+    unique_key: [Area Code, Item Code, Year Code]
+    constant_columns: [Domain Code, Domain, Element, Element Code, Unit]
+    schema:
+      - name: Domain Code
+        type: string
+        nullable: false
+        allowed_values: [QC]
+      - name: Domain
+        type: string
+        nullable: false
+        allowed_values: [Crops]
+      - name: Area Code
+        type: integer
+        nullable: false
+        min: 1
+      - name: Area
+        type: string
+        nullable: false
+      - name: Element Code
+        type: integer
+        nullable: false
+      - name: Element
+        type: string
+        nullable: false
+        allowed_values: [Yield]
+      - name: Item Code
+        type: integer
+        nullable: false
+      - name: Item
+        type: string
+        nullable: false
+        allowed_values:
+          - Maize
+          - Potatoes
+          - "Rice, paddy"
+          - Wheat
+          - Sorghum
+          - Soybeans
+          - Cassava
+          - Yams
+          - Sweet potatoes
+          - Plantains and others
+      - name: Year Code
+        type: integer
+        nullable: false
+        min: 1961
+        max: 2016
+      - name: Year
+        type: integer
+        nullable: false
+        min: 1961
+        max: 2016
+      - name: Unit
+        type: string
+        nullable: false
+        allowed_values: [hg/ha]
+      - name: Value
+        type: integer
+        nullable: false
+        min: 0
+        max: 2000000
+
+  # ----------------------------------------------------------------------
+  - dataset: crop_recommendation
+    file: data/raw/Crop_recommendation.csv    # ← CORRIGÉ : data/ → data/raw/
+    description: >
+      Paramètres agro-climatiques (N, P, K, température, humidité, pH,
+      pluviométrie) et culture recommandée associée, source Kaggle.
+    owner: data-team
+    sla:
+      min_rows: 2200
+      max_null_ratio: 0.0
+      freshness_days: null
+    unique_key: null
+    constant_columns: []
+    schema:
+      - name: N
+        type: integer
+        nullable: false
+        min: 0
+        max: 140
+      - name: P
+        type: integer
+        nullable: false
+        min: 5
+        max: 145
+      - name: K
+        type: integer
+        nullable: false
+        min: 5
+        max: 205
+      - name: temperature
+        type: float
+        nullable: false
+        min: 8.0
+        max: 45.0
+      - name: humidity
+        type: float
+        nullable: false
+        min: 14.0
+        max: 100.0
+      - name: ph
+        type: float
+        nullable: false
+        min: 3.5
+        max: 10.0
+      - name: rainfall
+        type: float
+        nullable: false
+        min: 20.0
+        max: 300.0
+      - name: label
+        type: string
+        nullable: false
+        allowed_values:
+          - rice
+          - maize
+          - chickpea
+          - kidneybeans
+          - pigeonpeas
+          - mothbeans
+          - mungbean
+          - blackgram
+          - lentil
+          - pomegranate
+          - banana
+          - mango
+          - grapes
+          - watermelon
+          - muskmelon
+          - apple
+          - orange
+          - papaya
+          - coconut
+          - cotton
+          - jute
+          - coffee

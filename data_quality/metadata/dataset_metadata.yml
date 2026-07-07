@@ -1,0 +1,71 @@
+# ==============================================================================
+# dataset_metadata.yml
+# Métadonnées descriptives des jeux de données du projet smart-farming-mlops.
+# Complète data_contracts.yml (règles techniques) avec le contexte métier,
+# la gouvernance et la traçabilité des sources.
+# ==============================================================================
+
+version: 1.0
+
+datasets:
+
+  - name: yield
+    display_name: "FAOSTAT Crop Yield (1961-2016)"
+    file: data_quality/data/yield.csv
+    description: >
+      Rendements agricoles (hg/ha) par pays, culture et année, publiés par la
+      FAO (Food and Agriculture Organization of the United Nations).
+    source:
+      provider: FAOSTAT
+      url: https://www.fao.org/faostat/
+      license: CC BY-NC-SA 3.0 IGO
+      acquisition_date: unknown
+    domain: agriculture / séries temporelles
+    owner: data-team
+    steward: rajae
+    update_frequency: statique (dataset historique, pas de mise à jour prévue)
+    row_count: 56717
+    column_count: 12
+    primary_key: [Area Code, Item Code, Year Code]
+    sensitive_data: false
+    downstream_consumers:
+      - SeismicPredict/yield-forecasting notebook pipeline
+      - Dashboard React (visualisation par pays/culture)
+    tags: [faostat, agriculture, yield, time-series]
+
+  - name: crop_recommendation
+    display_name: "Crop Recommendation Dataset"
+    file: data_quality/data/Crop_recommendation.csv
+    description: >
+      Paramètres agro-climatiques (azote, phosphore, potassium, température,
+      humidité, pH, pluviométrie) associés à une culture recommandée.
+      Dataset expérimental équilibré (100 échantillons par culture).
+    source:
+      provider: Kaggle
+      url: https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset
+      license: unknown (vérifier la page Kaggle avant usage commercial)
+      acquisition_date: unknown
+    domain: agriculture / classification
+    owner: data-team
+    steward: rajae
+    update_frequency: statique
+    row_count: 2200
+    column_count: 8
+    primary_key: null
+    sensitive_data: false
+    downstream_consumers:
+      - Modèle de classification de recommandation de culture
+      - API Flask (serving)
+    tags: [kaggle, agriculture, crop-recommendation, classification]
+
+# ------------------------------------------------------------------------------
+# Gouvernance transverse
+# ------------------------------------------------------------------------------
+governance:
+  quality_gate_owner: data-team
+  escalation_contact: rajae
+  schema_change_process: >
+    Toute modification de schéma doit être reflétée simultanément dans
+    tests/schemas.py, contracts/data_contracts.yml et ce fichier, puis validée
+    par la suite pytest avant merge.
+  retention_policy: illimitée (datasets de recherche/académiques)
