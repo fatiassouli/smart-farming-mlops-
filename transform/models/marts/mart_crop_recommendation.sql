@@ -7,7 +7,7 @@ select
     ph,
     rainfall,
     crop_label,
-    -- Feature engineering (aligné avec le script d'inférence de Person 5)
+  
     nitrogen + phosphorus + potassium as npk_total,
     nitrogen / (phosphorus + 1e-6) as np_ratio,
     nitrogen / (potassium + 1e-6) as nk_ratio,
