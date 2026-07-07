@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: mart_crop_recommendation
+    description: >
+      Table finale prête pour le modèle de classification. Une ligne par
+      échantillon avec les features du sol/climat, la culture recommandée,
+      et des features engineerées alignées avec le pipeline d'inférence.
+    columns:
+      - name: nitrogen
+        description: "Teneur en azote (N) du sol"
+      - name: phosphorus
+        description: "Teneur en phosphore (P) du sol"
+      - name: potassium
+        description: "Teneur en potassium (K) du sol"
+      - name: temperature
+        description: "Température moyenne (°C)"
+      - name: humidity
+        description: "Humidité relative (%)"
+      - name: ph
+        description: "pH du sol"
+      - name: rainfall
+        description: "Précipitations moyennes (mm)"
+      - name: crop_label
+        description: "Culture recommandée (variable cible)"
+      - name: npk_total
+        description: "Somme des teneurs en azote, phosphore et potassium"
+      - name: np_ratio
+        description: "Ratio azote/phosphore"
+      - name: nk_ratio
+        description: "Ratio azote/potassium"
+      - name: heat_humidity
+        description: "Interaction température x humidité (normalisée)"
+      - name: rain_temp
+        description: "Interaction précipitations x température"
+
+  - name: mart_yield
+    description: >
+      Table finale prête pour le modèle de régression, avec le rendement
+      historique par pays, culture et année, et des features engineerées
+      (normalisation de l'année, transformation logarithmique du rendement).
+    columns:
+      - name: country
+        description: "Pays où le rendement a été mesuré"
+      - name: crop
+        description: "Culture concernée"
+      - name: year
+        description: "Année de la mesure"
+      - name: year_norm
+        description: "Année normalisée (année - année minimale du dataset)"
+      - name: yield_hg_ha
+        description: "Rendement en hg/ha (unité brute FAOSTAT)"
+      - name: yield_tonnes_per_ha
+        description: "Rendement converti en tonnes/hectare"
+      - name: log_yield
+        description: "Rendement transformé en log(1 + valeur) pour réduire l'asymétrie"
