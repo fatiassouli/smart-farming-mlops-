@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_yield
+    columns:
+      - name: area
+        tests:
+          - not_null
+      - name: item
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: yield_hg_ha
+        tests:
+          - not_null

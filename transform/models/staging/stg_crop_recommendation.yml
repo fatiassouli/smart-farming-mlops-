@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_crop_recommendation
+    columns:
+      - name: nitrogen
+        tests:
+          - not_null
+      - name: phosphorus
+        tests:
+          - not_null
+      - name: potassium
+        tests:
+          - not_null
+      - name: temperature
+        tests:
+          - not_null
+      - name: humidity
+        tests:
+          - not_null
+      - name: ph
+        tests:
+          - not_null
+      - name: rainfall
+        tests:
+          - not_null
+      - name: crop_label
+        tests:
+          - not_null
