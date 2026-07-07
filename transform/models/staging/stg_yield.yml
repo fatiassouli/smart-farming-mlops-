@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_yield
+    description: >
+      Table de staging nettoyée à partir des données brutes FAOSTAT sur le rendement agricole.
+      Ne conserve que les lignes correspondant à l'élément "Yield" avec une valeur non nulle.
+    columns:
+      - name: area
+        description: "Pays ou région où le rendement a été mesuré"
+        tests:
+          - not_null
+      - name: item
+        description: "Culture concernée (ex: Maize, Wheat, Rice...)"
+        tests:
+          - not_null
+      - name: year
+        description: "Année de la mesure du rendement"
+        tests:
+          - not_null
+      - name: yield_hg_ha
+        description: "Rendement en hectogrammes par hectare (hg/ha)"
+        tests:
+          - not_null

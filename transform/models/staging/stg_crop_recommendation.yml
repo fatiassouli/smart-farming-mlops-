@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: stg_crop_recommendation
+    description: >
+      Table de staging nettoyée à partir des données brutes crop_recommendation.
+      Contient les caractéristiques du sol et du climat utilisées pour recommander
+      la culture la plus adaptée (modèle de classification).
+    columns:
+      - name: nitrogen
+        description: "Teneur en azote (N) du sol"
+        tests:
+          - not_null
+      - name: phosphorus
+        description: "Teneur en phosphore (P) du sol"
+        tests:
+          - not_null
+      - name: potassium
+        description: "Teneur en potassium (K) du sol"
+        tests:
+          - not_null
+      - name: temperature
+        description: "Température moyenne de l'environnement (°C)"
+        tests:
+          - not_null
+      - name: humidity
+        description: "Humidité relative de l'environnement (%)"
+        tests:
+          - not_null
+      - name: ph
+        description: "pH du sol"
+        tests:
+          - not_null
+      - name: rainfall
+        description: "Précipitations moyennes (mm)"
+        tests:
+          - not_null
+      - name: crop_label
+        description: "Culture recommandée en fonction des conditions du sol et du climat (variable cible)"
+        tests:
+          - not_null

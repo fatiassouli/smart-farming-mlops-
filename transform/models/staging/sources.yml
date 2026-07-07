@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: sf_data
+    tables:
+      - name: crop_recommendation
+      - name: yield
