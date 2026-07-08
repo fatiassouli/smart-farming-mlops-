@@ -53,11 +53,12 @@ jobs:
         working-directory: data_quality
         run: python -m validators.contract_validator --all
       
+      - name: Create reports directory
+        run: mkdir -p reports
+      
       - name: Run full pipeline validation
         working-directory: data_quality
-        run: |
-          mkdir -p ../reports
-          python -m validators.pipeline_validator --report ../reports/pipeline_report.json
+        run: python -m validators.pipeline_validator --report ../reports/pipeline_report.json
       
       - name: Upload validation reports
         if: always()
