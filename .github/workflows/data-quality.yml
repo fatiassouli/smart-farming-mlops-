@@ -81,7 +81,7 @@ jobs:
               report = { overall_status: 'UNKNOWN', pytest: { passed: false } };
             }
             
-            const status = report.overall_status === 'PASS' ? '✅ PASSEd' : '❌ FAILED';
+            const status = report.overall_status === 'PASS' ? '✅ PASSED' : '❌ FAILED';
             const body = `## Data Quality Pipeline - ${status}
             
             | Check | Status |
