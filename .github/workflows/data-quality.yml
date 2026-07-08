@@ -15,10 +15,6 @@ on:
       - 'dbt/**'
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
@@ -33,12 +29,10 @@ jobs:
           python-version: '3.11'
       
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
       
       - name: Install dependencies
         run: |
@@ -46,27 +40,28 @@ jobs:
           pip install pytest pandera pyyaml pandas pyarrow matplotlib
       
       - name: Run pytest tests
-        working-directory: data_quality
-        run: pytest tests/ -v --tb=short
+        run: |
+          cd data_quality
+          pytest tests/ -v --tb=short
       
       - name: Validate Data Contracts
-        working-directory: data_quality
-        run: python -m validators.contract_validator --all
-      
-      - name: Create reports directory
-        run: mkdir -p reports
+        run: |
+          cd data_quality
+          python -m validators.contract_validator --all
       
       - name: Run full pipeline validation
-        working-directory: data_quality
-        run: python -m validators.pipeline_validator --report ../reports/pipeline_report.json
+        run: |
+          cd data_quality
+          python -m validators.pipeline_validator --report ../reports/pipeline_report.json
       
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: validation-reports
-          path: reports/
-          retention-days: 14
+          path: |
+            reports/pipeline_report.json
+            data_quality/pipeline_report.json
       
       - name: Comment PR with results
         if: github.event_name == 'pull_request' && always()
@@ -89,7 +84,7 @@ jobs:
             | Pytest Tests | ${report.pytest?.passed ? '✅' : '❌'} |
             | Data Contracts | ${report.overall_status === 'PASS' ? '✅' : '❌'} |
             
-            [View detailed reports](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+            [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
