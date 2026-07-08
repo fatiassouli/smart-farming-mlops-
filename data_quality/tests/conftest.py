@@ -70,4 +70,4 @@ def yield_schema():
 
 @pytest.fixture(scope="session")
 def crop_schema():
-    return CROP_SCHEMA
+    return CROP_SCHEMA# trigger rerun
