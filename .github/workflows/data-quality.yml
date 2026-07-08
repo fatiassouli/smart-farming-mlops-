@@ -20,40 +20,64 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # ==========================================================================
+      # 1. Checkout du code
+      # ==========================================================================
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      # ==========================================================================
+      # 2. Setup Python
+      # ==========================================================================
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
+      # ==========================================================================
+      # 3. Cache des dépendances (accélère les exécutions suivantes)
+      # ==========================================================================
       - name: Cache pip dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       
+      # ==========================================================================
+      # 4. Installation des dépendances
+      # ==========================================================================
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest pandera pyyaml pandas pyarrow matplotlib
       
+      # ==========================================================================
+      # 5. TESTS PYTEST (Complétude, Validité, Cohérence)
+      # ==========================================================================
       - name: Run pytest tests
         run: |
           cd data_quality
           pytest tests/ -v --tb=short
       
+      # ==========================================================================
+      # 6. VALIDATION DES DATA CONTRACTS
+      # ==========================================================================
       - name: Validate Data Contracts
         run: |
           cd data_quality
           python -m validators.contract_validator --all
       
+      # ==========================================================================
+      # 7. PIPELINE COMPLET + GÉNÉRATION DU RAPPORT
+      # ==========================================================================
       - name: Run full pipeline validation
         run: |
           cd data_quality
           python -m validators.pipeline_validator --report ../reports/pipeline_report.json
       
+      # ==========================================================================
+      # 8. UPLOAD DES RAPPORTS (toujours, même si échec)
+      # ==========================================================================
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,6 +87,9 @@ jobs:
             reports/pipeline_report.json
             data_quality/pipeline_report.json
       
+      # ==========================================================================
+      # 9. COMMENTAIRE SUR LA PR (si c'est une pull request)
+      # ==========================================================================
       - name: Comment PR with results
         if: github.event_name == 'pull_request' && always()
         uses: actions/github-script@v7
