@@ -36,14 +36,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install pytest pandera pyyaml pandas pyarrow matplotlib
       
       - name: Run pytest tests
         working-directory: data_quality
@@ -55,7 +55,9 @@ jobs:
       
       - name: Run full pipeline validation
         working-directory: data_quality
-        run: python -m validators.pipeline_validator --report ../reports/pipeline_report.json
+        run: |
+          mkdir -p ../reports
+          python -m validators.pipeline_validator --report ../reports/pipeline_report.json
       
       - name: Upload validation reports
         if: always()
@@ -86,7 +88,7 @@ jobs:
             | Pytest Tests | ${report.pytest?.passed ? '✅' : '❌'} |
             | Data Contracts | ${report.overall_status === 'PASS' ? '✅' : '❌'} |
             
-            [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            [View detailed reports](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
