@@ -15,6 +15,10 @@ on:
       - 'dbt/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
@@ -29,39 +33,37 @@ jobs:
           python-version: '3.11'
       
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pandera pyyaml pandas pyarrow matplotlib
+          pip install -r requirements.txt
       
       - name: Run pytest tests
-        run: |
-          cd data_quality
-          pytest tests/ -v --tb=short
+        working-directory: data_quality
+        run: pytest tests/ -v --tb=short
       
       - name: Validate Data Contracts
-        run: |
-          cd data_quality
-          python -m validators.contract_validator --all
+        working-directory: data_quality
+        run: python -m validators.contract_validator --all
       
       - name: Run full pipeline validation
-        run: |
-          cd data_quality
-          python -m validators.pipeline_validator --report ../reports/pipeline_report.json
+        working-directory: data_quality
+        run: python -m validators.pipeline_validator --report ../reports/pipeline_report.json
       
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: validation-reports
-          path: |
-            reports/pipeline_report.json
-            data_quality/pipeline_report.json
+          path: reports/
+          retention-days: 14
       
       - name: Comment PR with results
         if: github.event_name == 'pull_request' && always()
