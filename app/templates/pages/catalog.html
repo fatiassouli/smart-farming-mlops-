@@ -1,0 +1,65 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Catalogue Complet - Smart Agriculture AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/catalog.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="catalog-container">
+    
+    <!-- En-tête -->
+    <div class="catalog-header-section">
+        <div class="catalog-header-left">
+            <h1 class="catalog-title"><i class="fas fa-book-open me-2 text-success-custom"></i>Catalogue Complet des Cultures</h1>
+            <p class="catalog-subtitle">Découvrez toutes les cultures recommandées par notre IA</p>
+        </div>
+        <div class="catalog-header-right">
+            <span class="catalog-badge">{{ crops|length }} cultures</span>
+        </div>
+    </div>
+    
+    <!-- Grille complète -->
+    <div class="catalog-grid" data-aos="fade-up">
+        {% for crop_name, crop_data in crops.items() %}
+        <div class="catalog-item" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+            <div class="catalog-item-image">
+                <img src="{{ url_for('static', filename='images/crops/' + crop_name|lower + '.jpg') }}" 
+                     onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.catalog-icon-fallback').style.display='flex';" 
+                     alt="{{ crop_name }}" 
+                     class="catalog-real-image">
+                <div class="catalog-icon-fallback" style="display: none;">
+                    <i class="fas fa-seedling fa-4x"></i>
+                </div>
+            </div>
+            <div class="catalog-item-body">
+                <h3 class="catalog-item-name">{{ crop_name|capitalize }}</h3>
+                <p class="catalog-item-desc">{{ crop_data.description }}</p>
+                <div class="catalog-item-footer">
+                    <span class="catalog-yield">
+                        <i class="fas fa-tractor me-1"></i>
+                        {{ crop_data.avg_yield }} t/ha
+                    </span>
+                    <a href="{{ url_for('prediction') }}" class="catalog-detail-btn">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Bouton retour -->
+    <div class="text-center mt-4" data-aos="fade-up">
+        <a href="{{ url_for('home') }}" class="btn-back-catalog">
+            <i class="fas fa-arrow-left me-2"></i>Retour à l'accueil
+        </a>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/catalog.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Tableau de Bord - AgriSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <!-- En-tête -->
+    <div class="dashboard-header-section">
+        <div class="dashboard-header-left">
+            <h1 class="dashboard-title">Tableau de Bord</h1>
+            <p class="dashboard-subtitle">
+                Données agricoles mondiales en temps réel
+                <span id="data-source-badge" class="badge bg-info text-dark ms-2">
+                    <i class="fas fa-table me-1"></i> Chargement…
+                </span>
+            </p>
+        </div>
+        <div class="dashboard-header-right">
+            <button class="btn-refresh" onclick="refreshDashboard()">
+                <i class="fas fa-sync-alt me-2"></i>Actualiser
+            </button>
+            <div class="dashboard-date">
+                <span class="date-day" id="current-date">—</span>
+                <span class="date-full" id="current-date-full">—</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Rapides -->
+    <div class="quick-actions">
+        <a href="{{ url_for('prediction') }}" class="quick-action-btn">
+            <i class="fas fa-plus-circle"></i> Nouvelle Prédiction
+        </a>
+        <a href="{{ url_for('history') }}" class="quick-action-btn">
+            <i class="fas fa-history"></i> Voir Historique
+        </a>
+        <button class="quick-action-btn" onclick="exportDashboardData()">
+            <i class="fas fa-file-export"></i> Exporter
+        </button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+        <div class="kpi-card total-pred-card">
+            <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="kpi-content">
+                <p class="kpi-label">Total Prédictions</p>
+                <h3 class="kpi-value" id="total-predictions">0</h3>
+                <span class="kpi-trend positive"><i class="fas fa-arrow-up"></i> Utilisateur</span>
+            </div>
+        </div>
+        <div class="kpi-card available-crops-card">
+            <div class="kpi-icon"><i class="fas fa-seedling"></i></div>
+            <div class="kpi-content">
+                <p class="kpi-label">Cultures Disponibles</p>
+                <h3 class="kpi-value" id="total-crops">22</h3>
+                <span class="kpi-trend positive"><i class="fas fa-leaf"></i> ML classifier</span>
+            </div>
+        </div>
+        <div class="kpi-card avg-yield-card">
+            <div class="kpi-icon"><i class="fas fa-tractor"></i></div>
+            <div class="kpi-content">
+                <p class="kpi-label">Rendement Moyen</p>
+                <h3 class="kpi-value"><span id="avg-yield">—</span> <span class="kpi-unit">t/ha</span></h3>
+                <span class="kpi-trend positive"><i class="fas fa-chart-bar"></i> Dataset mondial</span>
+            </div>
+        </div>
+        <div class="kpi-card avg-conf-card">
+            <div class="kpi-icon"><i class="fas fa-globe-africa"></i></div>
+            <div class="kpi-content">
+                <p class="kpi-label">Pays Disponibles</p>
+                <h3 class="kpi-value" id="total-countries">212</h3>
+                <span class="kpi-trend positive"><i class="fas fa-flag"></i> Modèle régression</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphiques ligne 1 -->
+    <div class="charts-row">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2><i class="fas fa-chart-pie me-2 chart-icon-green"></i>Distribution des Cultures</h2>
+                <p class="chart-subtitle">Répartition dans le dataset · mise à jour après chaque prédiction</p>
+            </div>
+            <div class="chart-wrapper"><canvas id="cropDistributionChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2><i class="fas fa-chart-bar me-2 chart-icon-gold"></i>Rendement Moyen par Culture</h2>
+                <p class="chart-subtitle">Données réelles FAO · moyennes mondiales (t/ha)</p>
+            </div>
+            <div class="chart-wrapper"><canvas id="topCropsChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- Graphiques ligne 2 -->
+    <div class="charts-row">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2><i class="fas fa-chart-line me-2 chart-icon-blue"></i>Évolution des Rendements</h2>
+                <p class="chart-subtitle">Tendance mondiale décennale (t/ha) — données FAO 1961–2016</p>
+            </div>
+            <div class="chart-wrapper"><canvas id="yieldTrendsChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2><i class="fas fa-compass me-2 chart-icon-orange"></i>Conditions Agroclimatiques Moyennes</h2>
+                <p class="chart-subtitle">Moyennes du dataset d'entraînement (2 200 parcelles)</p>
+            </div>
+            <div class="chart-wrapper"><canvas id="climateRadarChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- Tableau prédictions récentes -->
+    <div class="recent-section">
+        <div class="recent-header">
+            <h2 class="section-title"><i class="fas fa-clock me-2 section-icon-green"></i>Prédictions Récentes</h2>
+            <a href="{{ url_for('history') }}" class="view-all-link">
+                Voir tout <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Pays</th>
+                        <th>Culture Recommandée</th>
+                        <th>Rendement Estimé</th>
+                        <th>Évaluation</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-predictions">
+                    <tr><td colspan="5" class="text-center text-muted py-3">Chargement…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,111 @@
+<footer class="footer mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <h5 class="mb-3">
+                    <i class="fas fa-seedling text-success me-2"></i>
+                    AgroML
+                </h5>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-md-2" data-aos="fade-up" data-aos-delay="100">
+                <h6 class="mb-3">Quick Links</h6>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('prediction') }}">Prediction</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('history') }}">History</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <h6 class="mb-3">Resources</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Reference</a></li>
+                    <li><a href="#">Research Papers</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <h6 class="mb-3">Newsletter</h6>
+                <p class="text-muted small">Get the latest updates on AI agriculture</p>
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="Your email">
+                    <button class="btn btn-success" type="button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="my-4">
+        
+        <div class="text-center">
+            <p class="text-muted small mb-0">
+                &copy; 2024 SmartAgricultureAI. All rights reserved. 
+                Powered by Machine Learning & Precision Agriculture.
+            </p>
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    color: #fff;
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+    padding-left: 5px;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+</style>

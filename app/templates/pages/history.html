@@ -1,0 +1,92 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Historique des Prédictions - AgriSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="history-container">
+
+    <!-- En-tête -->
+    <div class="history-header-section">
+        <div class="history-header-left">
+            <h1 class="history-title">Historique des Prédictions</h1>
+            <p class="history-subtitle">Toutes vos prédictions AgriSmart</p>
+        </div>
+        <div class="history-header-right">
+            <button class="btn-history-export" onclick="exportData()">
+                <i class="fas fa-download me-2"></i>Exporter CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="history-filter-card" data-aos="fade-up">
+        <div class="filter-body">
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <label class="filter-label">Recherche</label>
+                    <input type="text" id="search-input" class="filter-input"
+                           placeholder="Culture, pays, évaluation…" oninput="filterTable()">
+                </div>
+                <div class="filter-item filter-action">
+                    <label class="filter-label">&nbsp;</label>
+                    <a href="{{ url_for('prediction') }}" class="btn-filter-apply">
+                        <i class="fas fa-plus-circle me-2"></i>Nouvelle prédiction
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="history-table-card" data-aos="fade-up">
+        <div class="table-responsive">
+            <table id="history-table" class="history-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Culture Recommandée</th>
+                        <th>Rendement (t/ha)</th>
+                        <th>Température</th>
+                        <th>Humidité</th>
+                        <th>Pluie</th>
+                        <th>N-P-K</th>
+                        <th>pH</th>
+                        <th>Évaluation</th>
+                    </tr>
+                </thead>
+                <tbody id="history-tbody">
+                    <tr><td colspan="10" class="text-center py-4">Chargement…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+<script>
+function exportData() {
+    fetch('/api/predictions').then(r => r.json()).then(data => {
+        if (!data.length) { alert('Aucune donnée à exporter.'); return; }
+        let csv = 'Date,Culture,Rendement (t/ha),Température,Humidité,Pluie,N,P,K,pH,Pays,Année,Évaluation\n';
+        data.forEach(p => {
+            csv += [p.date, p.crop_display||p.crop, p.yield_tha, p.temperature, p.humidity,
+                    p.rainfall, p.N, p.P, p.K, p.ph, p.country, p.year, p.rating_label].join(',') + '\n';
+        });
+        const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = 'agrismart_historique.csv';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+}
+</script>
+{% endblock %}

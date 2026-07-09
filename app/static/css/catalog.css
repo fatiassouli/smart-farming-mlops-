@@ -1,0 +1,237 @@
+/* ============================================
+   CATALOG CSS - Smart Agriculture AI
+   ============================================ */
+
+:root {
+    --agri-dark: #1e2522;
+    --agri-brand-green: #1e5e41;
+    --agri-green-light: #e3f4e8;
+    --bg-app-soft: #f4f9f6;
+    --font-serif: 'Playfair Display', 'Merriweather', serif;
+    --font-sans: 'Inter', 'Plus Jakarta Sans', sans-serif;
+}
+
+.catalog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    background: var(--bg-app-soft);
+    min-height: 100vh;
+}
+
+/* En-tête */
+.catalog-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: #ffffff;
+    padding: 0.9rem 1.75rem;
+    border-radius: 14px;
+    margin-bottom: 1.25rem;
+    border: 1px solid #f1f5f9;
+}
+
+.catalog-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin: 0;
+}
+
+.catalog-title .text-success-custom {
+    color: var(--agri-brand-green);
+}
+
+.catalog-subtitle {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.catalog-badge {
+    background: var(--agri-green-light);
+    color: var(--agri-brand-green);
+    padding: 0.25rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Grille */
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+/* Item */
+.catalog-item {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.catalog-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(30, 94, 65, 0.08);
+    border-color: var(--agri-brand-green);
+}
+
+.catalog-item-image {
+    height: 160px;
+    overflow: hidden;
+    background: var(--agri-green-light);
+    position: relative;
+}
+
+.catalog-real-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.catalog-item:hover .catalog-real-image {
+    transform: scale(1.05);
+}
+
+.catalog-icon-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--agri-green-light);
+}
+
+.catalog-icon-fallback i {
+    font-size: 3.5rem;
+    color: var(--agri-brand-green);
+    opacity: 0.5;
+}
+
+.catalog-item-body {
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.catalog-item-name {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin: 0 0 0.25rem 0;
+}
+
+.catalog-item-desc {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+}
+
+.catalog-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.catalog-yield {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.7rem;
+    background: var(--agri-green-light);
+    color: var(--agri-brand-green);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.catalog-detail-btn {
+    color: var(--agri-brand-green);
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.catalog-detail-btn:hover {
+    transform: translateX(4px);
+    color: var(--agri-brand-green);
+}
+
+/* Bouton retour */
+.btn-back-catalog {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.75rem;
+    background: var(--agri-brand-green);
+    color: #ffffff;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back-catalog:hover {
+    background: #143d2e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(30, 94, 65, 0.25);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .catalog-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .catalog-container {
+        padding: 1rem;
+    }
+    
+    .catalog-header-section {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.75rem 1rem;
+    }
+    
+    .catalog-title {
+        font-size: 1.2rem;
+    }
+    
+    .catalog-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .catalog-item-image {
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .catalog-container {
+        padding: 0.5rem;
+    }
+    
+    .catalog-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .catalog-item-image {
+        height: 140px;
+    }
+}

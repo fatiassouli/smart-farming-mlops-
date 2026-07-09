@@ -1,0 +1,351 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Prédiction Agricole - AgriSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prediction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="prediction-container">
+
+    <!-- En-tête -->
+    <div class="prediction-header-section">
+        <div class="prediction-header-left">
+            <h1 class="prediction-title"><i class="fas fa-seedling me-2 text-success-custom"></i>Prédiction Agricole</h1>
+            <p class="prediction-subtitle">Saisissez les conditions de votre parcelle pour une recommandation IA</p>
+        </div>
+        <div class="prediction-header-right">
+            <span class="prediction-badge"><i class="fas fa-microchip me-1"></i> IA v2.4</span>
+        </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="prediction-form-card" data-aos="fade-up">
+        <form id="prediction-form" novalidate>
+
+            <!-- Section 1: Composition du sol -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-layer-group"></i> Composition du Sol
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label" for="nitrogen">Azote (N) <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture prefix-mode">
+                            <span class="input-addon">N</span>
+                            <input type="number" name="N" class="form-control-agriculture"
+                                   id="nitrogen" required step="0.1" min="0" max="140" placeholder="Ex: 90">
+                        </div>
+                        <div class="form-text-help">Teneur en azote (mg/kg) — Dataset: 0–140</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="phosphorus">Phosphore (P) <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture prefix-mode">
+                            <span class="input-addon">P</span>
+                            <input type="number" name="P" class="form-control-agriculture"
+                                   id="phosphorus" required step="0.1" min="5" max="145" placeholder="Ex: 42">
+                        </div>
+                        <div class="form-text-help">Teneur en phosphore (mg/kg) — Dataset: 5–145</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="potassium">Potassium (K) <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture prefix-mode">
+                            <span class="input-addon">K</span>
+                            <input type="number" name="K" class="form-control-agriculture"
+                                   id="potassium" required step="0.1" min="5" max="205" placeholder="Ex: 43">
+                        </div>
+                        <div class="form-text-help">Teneur en potassium (mg/kg) — Dataset: 5–205</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Acidité du sol -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-eye-dropper"></i> Acidité du Sol
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="ph-control">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">pH du sol <span class="text-danger">*</span></label>
+                                <span class="ph-display-badge" id="phValue">6.5</span>
+                            </div>
+                            <input type="range" name="ph" class="form-range-agriculture"
+                                   min="3.5" max="9.5" step="0.1" value="6.5" id="ph">
+                            <div class="ph-graduation">
+                                <span>Acide (3.5)</span>
+                                <span>Neutre (7)</span>
+                                <span>Basique (9.5)</span>
+                            </div>
+                            <div class="form-text-help mt-2">Niveau d'acidité du sol — Dataset: 3.5–9.5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Conditions climatiques -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-cloud-sun-rain"></i> Conditions Climatiques
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label" for="temperature">Température <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture suffix-mode">
+                            <input type="number" name="temperature" class="form-control-agriculture"
+                                   id="temperature" required step="0.1" min="8" max="44" placeholder="Ex: 25">
+                            <span class="input-addon">°C</span>
+                        </div>
+                        <div class="form-text-help">Température moyenne annuelle — Dataset: 8–44°C</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="humidity">Humidité <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture suffix-mode">
+                            <input type="number" name="humidity" class="form-control-agriculture"
+                                   id="humidity" required step="0.1" min="14" max="100" placeholder="Ex: 75">
+                            <span class="input-addon">%</span>
+                        </div>
+                        <div class="form-text-help">Humidité relative — Dataset: 14–100%</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="rainfall">Précipitations <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture suffix-mode">
+                            <input type="number" name="rainfall" class="form-control-agriculture"
+                                   id="rainfall" required step="0.1" min="20" max="300" placeholder="Ex: 200">
+                            <span class="input-addon">mm</span>
+                        </div>
+                        <div class="form-text-help">Précipitations annuelles — Dataset: 20–300mm</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Localisation -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-map-marker-alt"></i> Localisation & Année
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label" for="country">Pays <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture select-mode">
+                            <select name="country" class="form-control-agriculture form-select-custom"
+                                    id="country" required>
+                                <option value="">— Sélectionner un pays —</option>
+                                {% for c in countries %}
+                                <option value="{{ c }}" {% if c == 'Morocco' %}selected{% endif %}>{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-text-help">{{ countries|length }} pays disponibles dans le modèle</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="prediction_year">Année de prédiction <span class="text-danger">*</span></label>
+                        <div class="input-group-agriculture select-mode">
+                            <select name="year" class="form-control-agriculture form-select-custom" id="prediction_year">
+                                {% for y in years %}
+                                <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-text-help">Données: 1961–2016 · Extrapolation jusqu'à 2030</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn-agriculture btn-primary-agriOrder" id="btn-predict">
+                    <i class="fas fa-chart-line me-2"></i>Lancer la prédiction
+                </button>
+                <button type="button" class="btn-agriculture btn-secondary-agriOrder" id="btn-demo">
+                    <i class="fas fa-flask me-2"></i>Exemple test
+                </button>
+                <button type="reset" class="btn-agriculture btn-outline-agriOrder" id="btn-reset">
+                    <i class="fas fa-sync-alt me-2"></i>Réinitialiser
+                </button>
+            </div>
+
+            <div class="form-footer">
+                <p class="text-muted small">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Prédictions basées sur 2 modèles ML entraînés sur 2 200 et 56 717 échantillons agricoles mondiaux.
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Zone résultats (affichée après prédiction) -->
+    <div id="results-section" style="display:none;" data-aos="fade-up">
+        <div class="results-container">
+
+            <div class="results-header-section">
+                <div class="results-header-left">
+                    <h2 class="results-title">Résultats de la Prédiction</h2>
+                    <p class="results-subtitle">Analyse IA de votre parcelle agricole</p>
+                </div>
+                <div class="results-header-right">
+                    <span class="results-badge"><i class="fas fa-check-circle me-1"></i> Prédiction validée</span>
+                </div>
+            </div>
+
+            <!-- Culture recommandée -->
+            <div class="crop-result-card">
+                <div class="crop-result-content">
+                    <div class="crop-icon-wrapper">
+                        <span id="res-icon" style="font-size:2.5rem;">🌱</span>
+                    </div>
+                    <h2 class="crop-title" id="res-crop">—</h2>
+                    <div class="crop-confidence">
+                        <span class="confidence-badge">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Confiance : <span id="res-confidence">—</span>%
+                        </span>
+                        <span class="crop-recommendation-tag">
+                            <i class="fas fa-thumbs-up me-1"></i> Recommandé
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grille résultats -->
+            <div class="results-grid">
+
+                <!-- Rendement estimé -->
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div class="result-icon-circle"><i class="fas fa-chart-line"></i></div>
+                        <h3>Rendement Estimé</h3>
+                    </div>
+                    <div class="result-card-body">
+                        <div class="yield-value">
+                            <span id="res-yield-tha">—</span> <span class="yield-unit">tonnes/ha</span>
+                        </div>
+                        <div class="yield-context">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            <span id="res-country">—</span> · <span id="res-year">—</span>
+                        </div>
+                        <div class="yield-badge">
+                            <span class="crop-tag" id="res-reg-crop">—</span>
+                        </div>
+                        <div class="yield-progress">
+                            <div class="progress-labels">
+                                <span>0 t/ha</span>
+                                <span>15 t/ha</span>
+                            </div>
+                            <div class="progress-bar-custom">
+                                <div class="progress-fill" id="res-progress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Évaluation -->
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div class="result-icon-circle"><i class="fas fa-star"></i></div>
+                        <h3>Évaluation du Rendement</h3>
+                    </div>
+                    <div class="result-card-body">
+                        <div class="stars-rating" id="res-stars">—</div>
+                        <div class="evaluation-badge">
+                            <span class="evaluation-level" id="res-rating-label">—</span>
+                        </div>
+                        <div class="metrics-list">
+                            <div class="metric-item">
+                                <span class="metric-label">Rendement brut</span>
+                                <span class="metric-value"><span id="res-yield-hgha">—</span> kg/ha</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Culture analysée (régression)</span>
+                                <span class="metric-value" id="res-reg-crop2">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paramètres saisis -->
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <div class="result-icon-circle"><i class="fas fa-sliders-h"></i></div>
+                        <h3>Paramètres Saisis</h3>
+                    </div>
+                    <div class="result-card-body">
+                        <div class="parameters-grid">
+                            <div class="parameter-item">
+                                <i class="fas fa-vial"></i>
+                                <span class="param-value" id="p-N">—</span>
+                                <span class="param-label">Azote (N)</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-vial"></i>
+                                <span class="param-value" id="p-P">—</span>
+                                <span class="param-label">Phosphore (P)</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-vial"></i>
+                                <span class="param-value" id="p-K">—</span>
+                                <span class="param-label">Potassium (K)</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-flask"></i>
+                                <span class="param-value" id="p-ph">—</span>
+                                <span class="param-label">pH</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span class="param-value" id="p-temp">—</span>
+                                <span class="param-label">Température</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-tint"></i>
+                                <span class="param-value" id="p-hum">—</span>
+                                <span class="param-label">Humidité</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-cloud-rain"></i>
+                                <span class="param-value" id="p-rain">—</span>
+                                <span class="param-label">Pluie</span>
+                            </div>
+                            <div class="parameter-item">
+                                <i class="fas fa-globe-africa"></i>
+                                <span class="param-value" id="p-country">—</span>
+                                <span class="param-label">Pays</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions résultats -->
+            <div class="results-actions">
+                <button onclick="scrollToForm()" class="btn-agriculture btn-primary-agriOrder">
+                    <i class="fas fa-redo me-2"></i>Nouvelle prédiction
+                </button>
+                <button onclick="window.print();" class="btn-agriculture btn-secondary-agriOrder">
+                    <i class="fas fa-print me-2"></i>Imprimer
+                </button>
+                <button onclick="exportResultsPage()" class="btn-agriculture btn-outline-agriOrder">
+                    <i class="fas fa-file-export me-2"></i>Exporter CSV
+                </button>
+            </div>
+
+            <!-- Contexte -->
+            <div class="results-info-box" id="res-info-box">
+                <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="info-content">
+                    <h5>À propos de cette prédiction</h5>
+                    <p id="res-info-text">—</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+<script src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+{% endblock %}

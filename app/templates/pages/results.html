@@ -1,0 +1,19 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Résultats - AgriSmart{% endblock %}
+
+{% block content %}
+<div class="prediction-container" style="padding: 4rem 1rem; text-align:center;">
+    <div class="results-info-box" style="max-width:600px;margin:0 auto;">
+        <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+        <div class="info-content">
+            <h5>Résultats intégrés</h5>
+            <p>
+                Les résultats de prédiction s'affichent désormais directement sur la 
+                <a href="{{ url_for('prediction') }}">page Prédiction</a> après soumission du formulaire. 
+                Vous pouvez aussi consulter votre <a href="{{ url_for('history') }}">historique</a>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

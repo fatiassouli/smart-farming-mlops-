@@ -1,0 +1,512 @@
+{% extends 'layout/base.html' %}
+
+
+{% block title %}Smart Agriculture AI - Intelligent Farming Decisions{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-particles" id="particles"></div>
+    <div class="container">
+        <div class="row min-vh-100 align-items-center">
+            <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1000">
+                <h1 class="display-3 fw-bold mb-4">
+                    AI-Powered Smart<br>
+                    <span class="text-gradient">Agriculture Decision</span> System
+                </h1>
+                <p class="lead mb-4 text-muted">
+                    Recommend the best crop and predict agricultural yield using advanced Machine Learning algorithms.
+                    Make data-driven decisions for sustainable farming.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('prediction') }}" class="btn btn-success btn-lg px-4">
+                        <i class="fas fa-chart-line me-2"></i>Start Prediction
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-success btn-lg px-4">
+                        <i class="fas fa-chart-simple me-2"></i>Explore Dashboard
+                    </a>
+                </div>
+                <div class="mt-5">
+                    <div class="d-flex gap-4">
+                        <div>
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span class="ms-2">98% Accuracy</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-cloud-sun text-warning"></i>
+                            <span class="ms-2">Real-time Analysis</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-chart-line text-info"></i>
+                            <span class="ms-2">Yield Prediction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5" data-aos="fade-left" data-aos-duration="1000">
+                <div class="floating-cards">
+                    <div class="float-card card-1">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div class="float-card card-2">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="float-card card-3">
+                        <i class="fas fa-cloud-rain"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Map Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Agricultural Map of Morocco</h2>
+            <p class="text-muted">Explore agricultural zones and crop distribution</p>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div id="agriculture-map" style="height: 500px; border-radius: 20px;" data-aos="fade-up"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ML Pipeline Section -->
+<section class="py-5 pipeline-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="badge bg-success-soft text-success px-3 py-2 rounded-pill mb-2 fw-semibold">Machine Learning</span>
+            <h2 class="fw-bold text-dark">How Our AI Pipeline Works</h2>
+            <p class="text-muted">From raw agricultural data to smart decisions in seconds</p>
+        </div>
+        
+        <div class="pipeline-container position-relative">
+            <!-- Ligne de connexion horizontale (visible sur PC) -->
+            <div class="pipeline-line d-none d-lg-block"></div>
+            
+            <div class="row g-4 position-relative">
+                <!-- Step 1 -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pipeline-card">
+                        <div class="step-number">1</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-tachometer-alt fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Soil Data</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">N, P, K, pH</span>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pipeline-card">
+                        <div class="step-number">2</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-cloud-sun fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Climate Data</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">Temp, Rain</span>
+                    </div>
+                </div>
+                
+                <!-- Step 3 (Harmonisé) -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pipeline-card">
+                        <div class="step-number">3</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-microchip fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Crop Model</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">Classification</span>
+                    </div>
+                </div>
+                
+                <!-- Step 4 (Harmonisé) -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="pipeline-card">
+                        <div class="step-number">4</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-chart-line fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Yield Model</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">Regression</span>
+                    </div>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="500">
+                    <div class="pipeline-card">
+                        <div class="step-number">5</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-lightbulb fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Decision</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">Prediction</span>
+                    </div>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center" data-aos="fade-up" data-aos-delay="600">
+                    <div class="pipeline-card">
+                        <div class="step-number">6</div>
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-chart-bar fa-2x text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-dark">Analysis</h6>
+                        <span class="badge bg-light text-muted border px-2 py-1">Dashboard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Statistics Section -->
+<section class="py-5 bg-gradient-stats">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card text-center">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h3 class="counter" data-target="10000">0</h3>
+                    <p class="text-muted">Predictions Made</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-card text-center">
+                    <i class="fas fa-seedling fa-3x text-success mb-3"></i>
+                    <h3 class="counter" data-target="25">0</h3>
+                    <p class="text-muted">Crops Available</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-card text-center">
+                    <i class="fas fa-tractor fa-3x text-success mb-3"></i>
+                    <h3 class="counter" data-target="5.8">0</h3>
+                    <p class="text-muted">Avg Yield (tons/ha)</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-card text-center">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h3 class="counter" data-target="5000">0</h3>
+                    <p class="text-muted">Active Farmers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Crop Catalog Section -->
+<section class="crop-catalog-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title-catalog">Catalogue des Cultures</h2>
+            <p class="section-subtitle-catalog">Découvrez un aperçu des cultures recommandées par notre IA</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Rice -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="50">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/rice.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Riz" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Riz</h5>
+                        <p class="crop-description">Variété à haut rendement pour conditions humides</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                4.5 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wheat -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/wheat.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Blé" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Blé</h5>
+                        <p class="crop-description">Blé résistant à la sécheresse, climat tempéré</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                3.2 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maize -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/maize.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Maïs" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Maïs</h5>
+                        <p class="crop-description">Maïs à croissance rapide, rendement élevé</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                5.8 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cotton -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/cotton.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Coton" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Coton</h5>
+                        <p class="crop-description">Coton de qualité supérieure pour le textile</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                2.1 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coffee -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="250">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/coffee.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Café" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Café</h5>
+                        <p class="crop-description">Café Arabica pour le marché d'exportation</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                1.5 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banana -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/banana.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Banane" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Banane</h5>
+                        <p class="crop-description">Banane sucrée tropicale pour le marché local</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                35.0 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mango -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="350">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/mango.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Mangue" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Mangue</h5>
+                        <p class="crop-description">Mangue Alphonse à haute valeur marchande</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                12.0 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coconut -->
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="crop-card-catalog">
+                    <div class="crop-image-container">
+                        <img src="{{ url_for('static', filename='images/crops/coconut.jpg') }}" 
+                             onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.crop-icon-fallback').style.display='flex';" 
+                             alt="Noix de Coco" 
+                             class="crop-real-image">
+                        <div class="crop-icon-fallback" style="display: none;">
+                            <i class="fas fa-seedling fa-3x" style="color: var(--agri-brand-green);"></i>
+                        </div>
+                    </div>
+                    <div class="crop-card-body">
+                        <h5 class="crop-name">Noix de Coco</h5>
+                        <p class="crop-description">Noix de coco polyvalente pour divers produits</p>
+                        <div class="crop-footer">
+                            <span class="crop-yield-badge">
+                                <i class="fas fa-tractor me-1"></i>
+                                80.0 t/ha
+                            </span>
+                            <i class="fas fa-arrow-right crop-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Smart Features</h2>
+            <p class="text-muted">Everything you need for precision agriculture</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5>Crop Recommendation</h5>
+                    <p class="text-muted">AI-powered crop selection based on soil and climate conditions</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card">
+                    <i class="fas fa-chart-simple fa-3x text-success mb-3"></i>
+                    <h5>Yield Prediction</h5>
+                    <p class="text-muted">Accurate harvest estimates using regression models</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card">
+                    <i class="fas fa-chart-pie fa-3x text-success mb-3"></i>
+                    <h5>Analytics Dashboard</h5>
+                    <p class="text-muted">Visualize trends and patterns in your agricultural data</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card">
+                    <i class="fas fa-balance-scale fa-3x text-success mb-3"></i>
+                    <h5>Scenario Comparison</h5>
+                    <p class="text-muted">Compare multiple farming strategies side by side</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card">
+                    <i class="fas fa-history fa-3x text-success mb-3"></i>
+                    <h5>Prediction History</h5>
+                    <p class="text-muted">Track and analyze all your previous predictions</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-success mb-3"></i>
+                    <h5>Real-time Updates</h5>
+                    <p class="text-muted">Weather and market data integration</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+    // Initialize map on home page
+    if (document.getElementById('agriculture-map')) {
+        var map = L.map('agriculture-map').setView([31.7917, -7.0926], 6);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
+        }).addTo(map);
+        
+        // Agricultural zones in Morocco
+        var zones = [
+            {coords: [34.0209, -6.8416], name: 'Rabat-Salé-Kénitra', crop: 'Wheat, Vegetables'},
+            {coords: [33.5731, -7.5898], name: 'Casablanca-Settat', crop: 'Cereals, Legumes'},
+            {coords: [31.6295, -7.9811], name: 'Marrakech-Safi', crop: 'Olives, Fruits'},
+            {coords: [34.2541, -4.0038], name: 'Fès-Meknès', crop: 'Olives, Grapes'},
+            {coords: [35.1667, -2.9333], name: 'Oriental', crop: 'Almonds, Figs'},
+            {coords: [30.4278, -9.5981], name: 'Agadir', crop: 'Argan, Citrus'}
+        ];
+        
+        zones.forEach(zone => {
+            L.marker(zone.coords)
+                .bindPopup(`<b>${zone.name}</b><br>Crops: ${zone.crop}`)
+                .addTo(map);
+        });
+    }
+</script>
+{% endblock %}

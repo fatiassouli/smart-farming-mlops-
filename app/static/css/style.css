@@ -1,0 +1,1253 @@
+:root {
+    --primary: #2E7D32;
+    --secondary: #66BB6A;
+    --accent: #FFC107;
+    --dark: #1B4332;
+    --light: #F5FFF5;
+    --gradient: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+}
+/* ============================================
+   CROP CATALOG MENU - Smart Agriculture AI
+   Section menu des 8 cultures
+   ============================================ */
+
+/* --- SECTION --- */
+.crop-catalog-section {
+    background: var(--bg-app-soft);
+    padding: 3.5rem 0;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-title-catalog {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin-bottom: 0.5rem;
+}
+
+.section-title-catalog::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--agri-brand-green);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+.section-subtitle-catalog {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* --- GRILLE MENU --- */
+.crop-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* --- ÉLÉMENT MENU --- */
+.crop-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.crop-menu-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(30, 94, 65, 0.08);
+    border-color: var(--agri-brand-green);
+}
+
+.crop-menu-item:hover .crop-menu-arrow {
+    transform: translateX(4px);
+    opacity: 1;
+}
+
+/* --- ICÔNE --- */
+.crop-menu-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: var(--agri-green-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--agri-brand-green);
+    transition: all 0.3s ease;
+}
+
+.crop-menu-item:hover .crop-menu-icon {
+    background: var(--agri-brand-green);
+    color: #ffffff;
+}
+
+/* --- CONTENU --- */
+.crop-menu-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.crop-menu-name {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin: 0 0 0.1rem 0;
+    line-height: 1.2;
+}
+
+.crop-menu-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0 0 0.2rem 0;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.crop-menu-yield {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--agri-brand-green);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.crop-menu-yield i {
+    font-size: 0.65rem;
+}
+
+/* --- FLÈCHE --- */
+.crop-menu-arrow {
+    color: var(--agri-brand-green);
+    font-size: 0.8rem;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+/* --- BOUTON VOIR TOUT --- */
+.btn-view-all-catalog {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.75rem;
+    background: var(--agri-brand-green);
+    color: #ffffff;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-view-all-catalog:hover {
+    background: #143d2e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(30, 94, 65, 0.25);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-view-all-catalog i {
+    transition: transform 0.3s ease;
+}
+
+.btn-view-all-catalog:hover i {
+    transform: translateX(4px);
+}
+
+/* --- RESPONSIVE --- */
+
+/* Tablettes */
+@media (max-width: 992px) {
+    .crop-catalog-section {
+        padding: 3rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.7rem;
+    }
+    
+    .crop-menu-grid {
+        gap: 0.6rem;
+    }
+    
+    .crop-menu-item {
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+    }
+    
+    .crop-menu-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 1rem;
+    }
+}
+
+/* Mobiles */
+@media (max-width: 768px) {
+    .crop-catalog-section {
+        padding: 2.5rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.4rem;
+    }
+    
+    .section-subtitle-catalog {
+        font-size: 0.85rem;
+    }
+    
+    .crop-menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+    
+    .crop-menu-item {
+        padding: 0.65rem 0.85rem;
+        gap: 0.6rem;
+        border-radius: 10px;
+    }
+    
+    .crop-menu-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .crop-menu-name {
+        font-size: 0.85rem;
+    }
+    
+    .crop-menu-desc {
+        font-size: 0.65rem;
+    }
+    
+    .crop-menu-yield {
+        font-size: 0.6rem;
+    }
+    
+    .crop-menu-arrow {
+        font-size: 0.7rem;
+    }
+    
+    .btn-view-all-catalog {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+}
+
+/* Très petits mobiles */
+@media (max-width: 480px) {
+    .crop-catalog-section {
+        padding: 2rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.2rem;
+    }
+    
+    .section-subtitle-catalog {
+        font-size: 0.75rem;
+    }
+    
+    .crop-menu-grid {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+        max-width: 400px;
+    }
+    
+    .crop-menu-item {
+        padding: 0.5rem 0.75rem;
+        gap: 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .crop-menu-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        font-size: 0.75rem;
+        border-radius: 6px;
+    }
+    
+    .crop-menu-name {
+        font-size: 0.8rem;
+    }
+    
+    .crop-menu-desc {
+        font-size: 0.6rem;
+    }
+    
+    .crop-menu-yield {
+        font-size: 0.55rem;
+    }
+    
+    .crop-menu-arrow {
+        font-size: 0.6rem;
+    }
+    
+    .btn-view-all-catalog {
+        padding: 0.4rem 1rem;
+        font-size: 0.7rem;
+        border-radius: 6px;
+    }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.crop-menu-item {
+    animation: slideInLeft 0.4s ease-out;
+}
+
+.crop-menu-item:nth-child(2) {
+    animation-delay: 0.05s;
+}
+.crop-menu-item:nth-child(3) {
+    animation-delay: 0.1s;
+}
+.crop-menu-item:nth-child(4) {
+    animation-delay: 0.15s;
+}
+.crop-menu-item:nth-child(5) {
+    animation-delay: 0.2s;
+}
+.crop-menu-item:nth-child(6) {
+    animation-delay: 0.25s;
+}
+.crop-menu-item:nth-child(7) {
+    animation-delay: 0.3s;
+}
+.crop-menu-item:nth-child(8) {
+    animation-delay: 0.35s;
+}
+/* ============================================
+   CROP CATALOG CARDS - Smart Agriculture AI
+   ============================================ */
+
+/* --- SECTION --- */
+.crop-catalog-section {
+    background: var(--bg-app-soft);
+    padding: 3.5rem 0;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-title-catalog {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin-bottom: 0.5rem;
+}
+
+.section-title-catalog::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--agri-brand-green);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+.section-subtitle-catalog {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* --- CARTE CULTURE --- */
+.crop-card-catalog {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.crop-card-catalog:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(30, 94, 65, 0.08);
+    border-color: var(--agri-brand-green);
+}
+
+.crop-card-catalog:hover .crop-arrow {
+    transform: translateX(4px);
+}
+
+/* --- IMAGE --- */
+.crop-image-container {
+    height: 140px;
+    width: 100%;
+    overflow: hidden;
+    background: var(--agri-green-light);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.crop-real-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.crop-card-catalog:hover .crop-real-image {
+    transform: scale(1.05);
+}
+
+.crop-icon-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--agri-green-light);
+}
+
+.crop-icon-fallback i {
+    font-size: 3rem;
+    color: var(--agri-brand-green);
+    opacity: 0.5;
+}
+
+/* --- CORPS --- */
+.crop-card-body {
+    padding: 1rem 1.25rem 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.crop-name {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--agri-dark);
+    margin: 0 0 0.25rem 0;
+}
+
+.crop-description {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin: 0 0 0.75rem 0;
+    flex: 1;
+    line-height: 1.4;
+}
+
+/* --- PIED --- */
+.crop-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+}
+
+.crop-yield-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.7rem;
+    background: var(--agri-green-light);
+    color: var(--agri-brand-green);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.crop-yield-badge i {
+    font-size: 0.65rem;
+}
+
+.crop-arrow {
+    color: var(--agri-brand-green);
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+    opacity: 0.7;
+}
+
+.crop-card-catalog:hover .crop-arrow {
+    opacity: 1;
+}
+
+/* --- BOUTON VOIR TOUT --- */
+.btn-view-all-catalog {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.75rem;
+    background: var(--agri-brand-green);
+    color: #ffffff;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-view-all-catalog:hover {
+    background: #143d2e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(30, 94, 65, 0.25);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-view-all-catalog i {
+    transition: transform 0.3s ease;
+}
+
+.btn-view-all-catalog:hover i {
+    transform: translateX(4px);
+}
+
+/* --- RESPONSIVE --- */
+
+/* Tablettes */
+@media (max-width: 992px) {
+    .crop-catalog-section {
+        padding: 3rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.7rem;
+    }
+    
+    .crop-image-container {
+        height: 120px;
+    }
+}
+
+/* Mobiles */
+@media (max-width: 768px) {
+    .crop-catalog-section {
+        padding: 2.5rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.4rem;
+    }
+    
+    .section-subtitle-catalog {
+        font-size: 0.85rem;
+    }
+    
+    .crop-card-catalog {
+        border-radius: 12px;
+    }
+    
+    .crop-image-container {
+        height: 100px;
+    }
+    
+    .crop-card-body {
+        padding: 0.75rem 1rem 1rem;
+    }
+    
+    .crop-name {
+        font-size: 0.9rem;
+    }
+    
+    .crop-description {
+        font-size: 0.7rem;
+    }
+    
+    .crop-yield-badge {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.6rem;
+    }
+    
+    .crop-arrow {
+        font-size: 0.75rem;
+    }
+    
+    .btn-view-all-catalog {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+}
+
+/* Très petits mobiles */
+@media (max-width: 480px) {
+    .crop-catalog-section {
+        padding: 2rem 0;
+    }
+    
+    .section-title-catalog {
+        font-size: 1.2rem;
+    }
+    
+    .section-subtitle-catalog {
+        font-size: 0.75rem;
+    }
+    
+    .crop-image-container {
+        height: 80px;
+    }
+    
+    .crop-card-body {
+        padding: 0.5rem 0.75rem 0.75rem;
+    }
+    
+    .crop-name {
+        font-size: 0.8rem;
+    }
+    
+    .crop-description {
+        font-size: 0.65rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .crop-footer {
+        padding-top: 0.5rem;
+    }
+    
+    .crop-yield-badge {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.5rem;
+    }
+    
+    .crop-yield-badge i {
+        font-size: 0.55rem;
+    }
+    
+    .crop-arrow {
+        font-size: 0.65rem;
+    }
+    
+    .btn-view-all-catalog {
+        padding: 0.4rem 1rem;
+        font-size: 0.7rem;
+        border-radius: 6px;
+    }
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+/* Glass Navigation */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--primary) !important;
+    transform: translateY(-2px);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    /* Dégradé du vert opaque à gauche vers la transparence à droite */
+    background-image: linear-gradient(
+        to right, 
+        rgba(227, 244, 232, 1) 0%, 
+        rgba(227, 244, 232, 0.95) 35%, 
+        rgba(227, 244, 232, 0.4) 70%, 
+        rgba(227, 244, 232, 0) 100%
+    ), url('../images/earth_agriculture.jpg'); /* Assurez-vous de l'extension .jpg ou .png ici */
+    background-repeat: no-repeat;
+    background-position: center right; /* Calé à droite pour bien voir le paysage */
+    background-size: cover;
+}
+/* --- ML Pipeline Style --- */
+.pipeline-section {
+    background-color: #fcfefe;
+}
+
+/* Carte unifiée pour toutes les étapes */
+.pipeline-card {
+    background: #ffffff;
+    padding: 30px 15px 25px 15px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.pipeline-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(25, 135, 84, 0.08);
+}
+
+/* Boîte d'icône unifiée (Vert clair et icône verte) */
+.pipeline-card .icon-box {
+    width: 60px;
+    height: 60px;
+    background-color: #e3f4e8;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pastilles numériques */
+.step-number {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: #198754;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Badge spécifique doux */
+.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.12);
+}
+
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Floating Cards Animation */
+.floating-cards {
+    position: relative;
+    height: 400px;
+}
+
+.float-card {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    animation: float 3s ease-in-out infinite;
+}
+
+.float-card i {
+    font-size: 3rem;
+    color: var(--primary);
+}
+
+.card-1 { top: 20%; left: 20%; animation-delay: 0s; }
+.card-2 { top: 50%; right: 20%; animation-delay: 0.5s; }
+.card-3 { bottom: 20%; left: 40%; animation-delay: 1s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Pipeline Steps */
+.pipeline-step {
+    position: relative;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.pipeline-step:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.step-icon {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.bg-gradient-stats {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
+
+.bg-gradient-stats .stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+}
+
+/* Conteneur de l'image de la culture */
+.crop-image-container {
+    height: 160px;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #e3f4e8; /* Conserve le fond vert clair initial */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Style de l'image réelle */
+.crop-real-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Remplir l'espace sans déformer l'image */
+    transition: transform 0.3s ease;
+}
+
+/* Effet zoom au survol de la carte (optionnel mais recommandé) */
+.crop-card:hover .crop-real-image {
+    transform: scale(1.05);
+}
+
+/* Style de secours pour l'icône si l'image échoue */
+.crop-icon-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Feature Cards */
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Animations */
+[data-aos] {
+    opacity: 0;
+    transition-property: transform, opacity;
+}
+
+[data-aos].aos-animate {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2rem;
+    }
+    
+    .hero-section .min-vh-100 {
+        min-height: auto;
+        padding: 4rem 0;
+    }
+    
+    .floating-cards {
+        display: none;
+    }
+    
+    .pipeline-step {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(46, 125, 50, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s ease-in-out infinite;
+}
+/* Espacement global de la page prenant en compte la hauteur de la Navbar */
+.prediction-page-container {
+    padding-top: 100px !important; /* Crée l'espace nécessaire sous votre menu */
+    padding-bottom: 3rem;
+}
+
+/* Container du Formulaire Réduit et Centré */
+.prediction-form-container {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin: 0 auto; /* Force le centrage horizontal secondaire */
+}
+
+/* En-tête simple, blanc et aligné */
+.prediction-simple-header {
+    background: #ffffff;
+    padding: 2.5rem 2.5rem 0.5rem 2.5rem;
+}
+
+.prediction-simple-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a4332; /* Même police verte que l'image originale */
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.text-success-custom {
+    color: #2e7d32 !important;
+    font-size: 1.7rem;
+}
+
+/* Titres des sous-sections */
+.form-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #475569;
+    margin-bottom: 1.25rem;
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.form-section-title i {
+    margin-right: 8px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Structure des Labels et Textes */
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    font-size: 0.88rem;
+    margin-bottom: 0.3rem;
+}
+
+.form-text-help {
+    font-size: 0.76rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Structure des Inputs alignés avec l'image 2 */
+.input-group-agriculture {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 42px; /* Un peu plus compact pour un rendu plus net */
+    transition: all 0.2s ease;
+}
+
+.input-group-agriculture:focus-within {
+    border-color: #2E7D32;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.input-group-agriculture .input-addon {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 100%;
+    border-right: 1px solid #cbd5e1;
+}
+
+.input-group-agriculture.suffix-mode .input-addon {
+    border-right: none;
+    border-left: 1px solid #cbd5e1;
+}
+
+.input-group-agriculture .form-control-agriculture {
+    border: none !important;
+    outline: none !important;
+    padding: 0 0.85rem;
+    width: 100%;
+    height: 100%;
+    color: #334155;
+    font-size: 0.92rem;
+}
+
+.form-select-custom {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 14px 10px;
+}
+
+.input-group-agriculture.disabled-mode {
+    background-color: #f8fafc;
+}
+
+/* Slider pH */
+.form-range-agriculture {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background: #e2e8f0;
+    outline: none;
+}
+
+.form-range-agriculture::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #2E7D32;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.ph-display-badge {
+    background-color: #e3f4e8;
+    color: #1B4332;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.ph-graduation-text {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Boutons */
+.btn-agriculture {
+    padding: 0.65rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+}
+
+.btn-primary-agriOrder {
+    background-color: #1B4332;
+    color: #ffffff;
+}
+
+.btn-primary-agriOrder:hover {
+    background-color: #2E7D32;
+}
+
+.btn-secondary-agriOrder {
+    background-color: #ffffff;
+    color: #1B4332;
+    border-color: #1B4332;
+}
+
+.btn-secondary-agriOrder:hover {
+    background-color: #f0fdf4;
+}
+
+.btn-outline-agriOrder {
+    background-color: #ffffff;
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+
+.btn-outline-agriOrder:hover {
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+@media (max-width: 576px) {
+    .btn-agriculture {
+        width: 100%;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+}
+
+/* Form Styles */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+/* Button Styles */
+.btn-success {
+    background: var(--gradient);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline-success {
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    transform: translateY(-2px);
+}
