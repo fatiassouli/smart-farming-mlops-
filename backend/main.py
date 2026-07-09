@@ -23,6 +23,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from monitoring import setup_monitoring
 
 # Le dossier mlops/ (Personne 6) vit à la racine du repo, un niveau au-dessus
 # de backend/. On l'ajoute au sys.path pour pouvoir faire
@@ -65,6 +66,7 @@ app = FastAPI(
     ),
     lifespan=lifespan,
 )
+setup_monitoring(app)
 
 # CORS ouvert pour permettre l'accès depuis le frontend / les démos
 app.add_middleware(
