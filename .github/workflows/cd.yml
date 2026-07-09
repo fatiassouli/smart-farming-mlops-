@@ -25,8 +25,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/api:latest
-            ghcr.io/${{ github.repository }}/api:${{ github.sha }}
+            ghcr.io/fatlassouli/smart-farming-api:latest
+            ghcr.io/fatlassouli/smart-farming-api:${{ github.sha }}
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /opt/smart-farming
-            docker-compose pull
+            docker pull ghcr.io/fatlassouli/smart-farming-api:latest
             docker-compose up -d api
             docker system prune -f
             echo "✅ Déploiement terminé"
