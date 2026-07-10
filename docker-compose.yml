@@ -39,6 +39,17 @@ services:
       --port 5000
     restart: unless-stopped
 
+    # ═══════════════════════════════════════════
+  # App Flask (AgroML - Interface web)
+  # ═══════════════════════════════════════════
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    restart: unless-stopped
+
   # ═══════════════════════════════════════════
   # Dagster Orchestration (Personne 8 - TOI)
   # ═══════════════════════════════════════════
