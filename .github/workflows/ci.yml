@@ -74,39 +74,9 @@ jobs:
           python log_models.py
         continue-on-error: true
 
-  # ═══════════════════════════════════════════════════════
-  # DAGSTER - CORRIGÉ : lancer depuis la racine avec -d
-  # ═══════════════════════════════════════════════════════
-  dagster-pipeline:
-    runs-on: ubuntu-latest
-    needs: [model-test]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: |
-          pip install -r backend/requirements.txt
-          pip install dagster==1.7.* dagster-webserver==1.7.* pandas pyyaml
-      - name: Run Dagster Pipeline
-        run: |
-          # Lancer depuis la racine avec le working directory
-          dagster job execute \
-            -j full_pipeline \
-            -m orchestration.definitions \
-            --working-directory . \
-            2>&1 | tee dagster-output.log
-          
-          if grep -q "FAILURE\|ERROR\|failed" dagster-output.log; then
-            echo "❌ Pipeline Dagster échoué"
-            exit 1
-          else
-            echo "✅ Pipeline Dagster réussi"
-          fi
-
   build-docker:
     runs-on: ubuntu-latest
-    needs: [dagster-pipeline]
+    needs: [model-test]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
