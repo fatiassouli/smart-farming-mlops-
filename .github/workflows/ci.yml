@@ -82,20 +82,71 @@ jobs:
       - uses: docker/setup-buildx-action@v3
       - run: docker build -f backend/Dockerfile -t smart-farming-api:${{ github.sha }} .
 
-  test-container:
+  # ═══════════════════════════════════════════════════════
+  # MONITORING + TEST CONTAINER (fusionné)
+  # ═══════════════════════════════════════════════════════
+  monitoring:
     runs-on: ubuntu-latest
     needs: [build-docker]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
       - run: docker build -f backend/Dockerfile -t smart-farming-api:${{ github.sha }} .
-      - run: |
+      
+      # Démarrer le container
+      - name: Start API container
+        run: |
           docker run -d --name test-api -p 8000:8000 smart-farming-api:${{ github.sha }}
           sleep 15
-      - run: curl -f http://localhost:8000/health
-      - run: curl -f http://localhost:8000/metrics
-      - run: |
+
+      # ─── Tests Monitoring ───
+      - name: Test /health
+        run: |
+          echo "🔍 Test /health..."
+          curl -s http://localhost:8000/health | python3 -m json.tool
+
+      - name: Test /metrics
+        run: |
+          echo "📊 Test /metrics..."
+          curl -s http://localhost:8000/metrics | python3 -m json.tool
+
+      - name: Test /prometheus
+        run: |
+          echo "📈 Test /prometheus..."
+          curl -s http://localhost:8000/prometheus
+
+      - name: Test Performance (latence)
+        run: |
+          echo "⚡ Test performance..."
+          for i in {1..10}; do
+            curl -s -o /dev/null -w "%{time_total}s\n" http://localhost:8000/health
+          done
+
+      # ─── Tests API fonctionnels ───
+      - name: Test /recommend_crop
+        run: |
+          echo "🌾 Test recommend_crop..."
           curl -X POST http://localhost:8000/recommend_crop \
             -H "Content-Type: application/json" \
             -d '{"N":90,"P":42,"K":43,"temperature":20.8,"humidity":82.0,"ph":6.5,"rainfall":202.9}'
-      - run: docker stop test-api && docker rm test-api
+
+      - name: Test /predict_yield
+        run: |
+          echo "📈 Test predict_yield..."
+          curl -X POST http://localhost:8000/predict_yield \
+            -H "Content-Type: application/json" \
+            -d '{"N":90,"P":42,"K":43,"temperature":20.8,"humidity":82.0,"ph":6.5,"rainfall":202.9,"area":"France","item":"Rice","year":2024}'
+
+      # ─── Test Charge ───
+      - name: Test Charge
+        run: |
+          echo "🔥 Test charge (10 requêtes)..."
+          for i in {1..10}; do
+            curl -s http://localhost:8000/health > /dev/null &
+          done
+          wait
+          echo "✅ Charge OK"
+
+      # Arrêter
+      - name: Stop container
+        run: docker stop test-api && docker rm test-api
