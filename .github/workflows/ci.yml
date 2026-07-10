@@ -7,6 +7,9 @@ on:
     branches: [main]
 
 jobs:
+  # ═══════════════════════════════════════════════════════
+  # JOB 1 : Tests et qualité du code
+  # ═══════════════════════════════════════════════════════
   test:
     runs-on: ubuntu-latest
     steps:
@@ -21,25 +24,36 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r backend/requirements.txt
-          pip install -r requirements-dev.txt 2>/dev/null || true
+          pip install ruff black bandit pytest requests pandas pyyaml dagster==1.7.*
 
       - name: Lint with ruff
         run: |
-          pip install ruff
           ruff check . --ignore E402,E501 || true
+
+      - name: Format check with black
+        run: |
+          black --check . || true
+
+      - name: Security scan with bandit
+        run: |
+          bandit -r backend/ -f json -o bandit-report.json || true
+          cat bandit-report.json || echo "No report"
 
       - name: Run data quality pipeline
         run: |
-          pip install pandas pyyaml
-          python data_quality/validators/pipeline_validator.py --report data_quality/ci_report.json
+          cd data_quality
+          python validators/pipeline_validator.py --report pipeline_report.json
         continue-on-error: true
 
       - name: Upload quality report
         uses: actions/upload-artifact@v4
         with:
           name: data-quality-report
-          path: data_quality/ci_report.json
+          path: data_quality/pipeline_report.json
 
+  # ═══════════════════════════════════════════════════════
+  # JOB 2 : Build Docker API
+  # ═══════════════════════════════════════════════════════
   build-docker:
     needs: test
     runs-on: ubuntu-latest
@@ -53,11 +67,21 @@ jobs:
       - name: Build API image
         run: |
           docker build -f backend/Dockerfile -t smart-farming-api:${{ github.sha }} .
-          docker images | grep smart-farming-api
 
       - name: Test API container
         run: |
           docker run -d --name test-api -p 8000:8000 smart-farming-api:${{ github.sha }}
-          sleep 5
+          sleep 10
           curl -f http://localhost:8000/health || (docker logs test-api && exit 1)
           docker stop test-api && docker rm test-api
+
+      - name: Save Docker image
+        run: |
+          docker save smart-farming-api:${{ github.sha }} > smart-farming-api.tar
+          gzip smart-farming-api.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: smart-farming-api.tar.gz
