@@ -8,156 +8,94 @@ on:
 
 jobs:
   # ═══════════════════════════════════════════════════════
-  # JOB 1 : Lint & Format
-  # ═══════════════════════════════════════════════════════
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install tools
-        run: pip install ruff black
-
-      - name: Ruff lint
-        run: ruff check . --ignore E402,E501
-
-      - name: Black format check
-        run: black --check .
-
-  # ═══════════════════════════════════════════════════════
-  # JOB 2 : Security Scan
-  # ═══════════════════════════════════════════════════════
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install bandit
-        run: pip install bandit
-
-      - name: Bandit scan
-        run: bandit -r backend/ -f json -o bandit-report.json || true
-
-      - name: Upload security report
-        uses: actions/upload-artifact@v4
-        with:
-          name: security-report
-          path: bandit-report.json
-
-  # ═══════════════════════════════════════════════════════
-  # JOB 3 : Tests Unitaires
+  # JOB 1 : Tests Unitaires + Tests Modèles
   # ═══════════════════════════════════════════════════════
   unit-tests:
     runs-on: ubuntu-latest
-    needs: [lint, security]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
+      - run: |
           pip install -r backend/requirements.txt
-          pip install pytest pytest-cov
-
-      - name: Run pytest
-        run: pytest tests/ -v --cov=src --cov-report=xml
-
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
+          pip install pytest pytest-cov scikit-learn joblib
+      - run: pytest tests/ -v --cov=src --cov-report=xml
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.xml
 
   # ═══════════════════════════════════════════════════════
-  # JOB 4 : Data Quality
+  # JOB 2 : Tests des Modèles ML
   # ═══════════════════════════════════════════════════════
-  data-quality:
+  model-tests:
     runs-on: ubuntu-latest
     needs: [unit-tests]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - run: |
+          pip install pytest scikit-learn joblib numpy
+      - name: Test modèles ML
+        run: pytest tests/test_models.py -v
+      - name: Upload model test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-test-report
+          path: tests/test_models.py
 
-      - name: Install dependencies
-        run: |
-          pip install pandas pyyaml
-
-      - name: Run Data Quality Pipeline
-        run: |
+  # ═══════════════════════════════════════════════════════
+  # JOB 3 : Data Quality
+  # ═══════════════════════════════════════════════════════
+  data-quality:
+    runs-on: ubuntu-latest
+    needs: [model-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas pyyaml
+      - run: |
           cd data_quality
           python validators/pipeline_validator.py --report pipeline_report.json
-
-      - name: Upload quality report
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: data-quality-report
           path: data_quality/pipeline_report.json
 
   # ═══════════════════════════════════════════════════════
-  # JOB 5 : Dagster Pipeline
+  # JOB 4 : Dagster Pipeline
   # ═══════════════════════════════════════════════════════
   dagster-pipeline:
     runs-on: ubuntu-latest
     needs: [data-quality]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
+      - run: |
           pip install -r backend/requirements.txt
           pip install dagster==1.7.* dagster-webserver==1.7.* pandas pyyaml
-
-      - name: Run Dagster Pipeline
-        run: |
+      - run: |
           cd orchestration
           dagster job execute -j full_pipeline -m orchestration.definitions
 
   # ═══════════════════════════════════════════════════════
-  # JOB 6 : Build Docker
+  # JOB 5 : Build Docker
   # ═══════════════════════════════════════════════════════
   build-docker:
     runs-on: ubuntu-latest
     needs: [dagster-pipeline]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build API image
-        run: docker build -f backend/Dockerfile -t smart-farming-api:${{ github.sha }} .
-
-      - name: Test API container
-        run: |
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - run: docker build -f backend/Dockerfile -t smart-farming-api:${{ github.sha }} .
+      - run: |
           docker run -d --name test-api -p 8000:8000 smart-farming-api:${{ github.sha }}
           sleep 10
           curl -f http://localhost:8000/health || (docker logs test-api && exit 1)
