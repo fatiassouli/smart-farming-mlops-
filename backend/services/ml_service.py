@@ -19,12 +19,12 @@ import pandas as pd
 logger = logging.getLogger("smart_farming_api")
 
 _THIS_FILE = os.path.abspath(__file__)
-_SERVICES_DIR = os.path.dirname(_THIS_FILE)      # backend/services
-_BACKEND_DIR = os.path.dirname(_SERVICES_DIR)    # backend
-_PROJECT_ROOT = os.path.dirname(_BACKEND_DIR)    # racine du repo
+_SERVICES_DIR = os.path.dirname(_THIS_FILE)  # backend/services
+_BACKEND_DIR = os.path.dirname(_SERVICES_DIR)  # backend
+_PROJECT_ROOT = os.path.dirname(_BACKEND_DIR)  # racine du repo
 MODELS_DIR = os.path.join(_PROJECT_ROOT, "models")
 
-YEAR_MIN = 1961           # confirmé par le notebook régression
+YEAR_MIN = 1961  # confirmé par le notebook régression
 YIELD_UNIT_DIVISOR = 10_000  # dataset FAO en hg/ha -> conversion en t/ha
 
 
@@ -53,23 +53,41 @@ class MLService:
         Chaque bloc est indépendant : si l'un plante, l'autre peut quand même
         se charger (les flags *_ready reflètent l'état réel)."""
         try:
-            self.cls_model = joblib.load(os.path.join(self.models_dir, "cls_best_model.pkl"))
-            self.cls_scaler = joblib.load(os.path.join(self.models_dir, "cls_scaler.pkl"))
-            self.cls_label_encoder = joblib.load(os.path.join(self.models_dir, "cls_label_encoder.pkl"))
-            self.cls_feature_columns = joblib.load(os.path.join(self.models_dir, "cls_feature_columns.pkl"))
+            self.cls_model = joblib.load(
+                os.path.join(self.models_dir, "cls_best_model.pkl")
+            )
+            self.cls_scaler = joblib.load(
+                os.path.join(self.models_dir, "cls_scaler.pkl")
+            )
+            self.cls_label_encoder = joblib.load(
+                os.path.join(self.models_dir, "cls_label_encoder.pkl")
+            )
+            self.cls_feature_columns = joblib.load(
+                os.path.join(self.models_dir, "cls_feature_columns.pkl")
+            )
             self.classification_ready = True
         except Exception as exc:
             logger.error("Échec chargement modèle classification : %s", exc)
             self.classification_ready = False
 
         try:
-            self.reg_model = joblib.load(os.path.join(self.models_dir, "reg_best_model.pkl"))
-            self.reg_scaler = joblib.load(os.path.join(self.models_dir, "reg_scaler.pkl"))
-            self.reg_area_means = joblib.load(os.path.join(self.models_dir, "reg_area_means.pkl"))
-            self.reg_feature_columns = joblib.load(os.path.join(self.models_dir, "reg_feature_columns.pkl"))
+            self.reg_model = joblib.load(
+                os.path.join(self.models_dir, "reg_best_model.pkl")
+            )
+            self.reg_scaler = joblib.load(
+                os.path.join(self.models_dir, "reg_scaler.pkl")
+            )
+            self.reg_area_means = joblib.load(
+                os.path.join(self.models_dir, "reg_area_means.pkl")
+            )
+            self.reg_feature_columns = joblib.load(
+                os.path.join(self.models_dir, "reg_feature_columns.pkl")
+            )
             self._area_fallback = float(self.reg_area_means.mean())
             self.available_items = [
-                c.replace("Item_", "") for c in self.reg_feature_columns if c.startswith("Item_")
+                c.replace("Item_", "")
+                for c in self.reg_feature_columns
+                if c.startswith("Item_")
             ]
             self.regression_ready = True
         except Exception as exc:
@@ -79,9 +97,13 @@ class MLService:
     # ---------------- Classification ----------------
     def _engineer_cls_features(self, payload) -> pd.DataFrame:
         row = {
-            "N": payload.N, "P": payload.P, "K": payload.K,
-            "temperature": payload.temperature, "humidity": payload.humidity,
-            "ph": payload.ph, "rainfall": payload.rainfall,
+            "N": payload.N,
+            "P": payload.P,
+            "K": payload.K,
+            "temperature": payload.temperature,
+            "humidity": payload.humidity,
+            "ph": payload.ph,
+            "rainfall": payload.rainfall,
         }
         df_row = pd.DataFrame([row])
         df_row["NPK_total"] = df_row["N"] + df_row["P"] + df_row["K"]
@@ -144,6 +166,7 @@ ml_service = MLService()
 
 # --- Test rapide en local (simule les objets Pydantic avec une classe simple) ---
 if __name__ == "__main__":
+
     class _FakeCropPayload:
         def __init__(self, **kw):
             self.__dict__.update(kw)
@@ -157,11 +180,15 @@ if __name__ == "__main__":
     print("regression_ready     :", ml_service.regression_ready)
 
     print("\n=== Test classification ===")
-    payload_cls = _FakeCropPayload(N=90, P=42, K=43, temperature=20.8, humidity=82.0, ph=6.5, rainfall=202.9)
+    payload_cls = _FakeCropPayload(
+        N=90, P=42, K=43, temperature=20.8, humidity=82.0, ph=6.5, rainfall=202.9
+    )
     print(ml_service.recommend_crop(payload_cls))
 
     print("\n=== Test régression ===")
     payload_yield = _FakeYieldPayload(area="Afghanistan", year=2016, item="Maize")
     print(ml_service.predict_yield(payload_yield))
-    payload_yield2 = _FakeYieldPayload(area="Pays_Inconnu_Test", year=2020, item="Wheat")
+    payload_yield2 = _FakeYieldPayload(
+        area="Pays_Inconnu_Test", year=2020, item="Wheat"
+    )
     print(ml_service.predict_yield(payload_yield2))

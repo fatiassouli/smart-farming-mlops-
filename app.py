@@ -11,19 +11,17 @@ from flask import Flask, render_template, request, jsonify
 import os
 import datetime
 
-from utils.predictor import (
-    predict_crop, predict_yield,
-    CROP_CLASSES, COUNTRIES, REG_CROPS, CROP_ICONS
-)
+from utils.predictor import predict_crop, predict_yield, COUNTRIES
 
 # ── Configuration Flask ──────────────────────────────────────────
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 
 
 # ════════════════════════════════════════════════════════════════
 # ROUTES
 # ════════════════════════════════════════════════════════════════
+
 
 @app.route("/")
 def index():
@@ -49,15 +47,15 @@ def predict():
 
     # ── POST : exécuter le pipeline complet ──────────────────────
     try:
-        N           = float(request.form["N"])
-        P           = float(request.form["P"])
-        K           = float(request.form["K"])
+        N = float(request.form["N"])
+        P = float(request.form["P"])
+        K = float(request.form["K"])
         temperature = float(request.form["temperature"])
-        humidity    = float(request.form["humidity"])
-        ph          = float(request.form["ph"])
-        rainfall    = float(request.form["rainfall"])
-        country     = request.form["country"]
-        year        = int(request.form["year"])
+        humidity = float(request.form["humidity"])
+        ph = float(request.form["ph"])
+        rainfall = float(request.form["rainfall"])
+        country = request.form["country"]
+        year = int(request.form["year"])
     except (KeyError, ValueError) as e:
         return render_template(
             "predict.html",
@@ -90,7 +88,9 @@ def predict():
     return render_template(
         "result.html",
         # Entrées réaffichées
-        N=N, P=P, K=K,
+        N=N,
+        P=P,
+        K=K,
         temperature=temperature,
         humidity=humidity,
         ph=ph,
@@ -119,22 +119,28 @@ def api_predict():
     data = request.get_json(force=True)
     try:
         crop_name, confidence, icon = predict_crop(
-            float(data["N"]), float(data["P"]), float(data["K"]),
-            float(data["temperature"]), float(data["humidity"]),
-            float(data["ph"]), float(data["rainfall"])
+            float(data["N"]),
+            float(data["P"]),
+            float(data["K"]),
+            float(data["temperature"]),
+            float(data["humidity"]),
+            float(data["ph"]),
+            float(data["rainfall"]),
         )
         yield_tha, yield_hgha, reg_crop = predict_yield(
             crop_name, data.get("country", "Morocco"), int(data.get("year", 2025))
         )
-        return jsonify({
-            "crop": crop_name,
-            "confidence": confidence,
-            "icon": icon,
-            "yield_tha": yield_tha,
-            "yield_hgha": yield_hgha,
-            "reg_crop": reg_crop,
-            "status": "ok"
-        })
+        return jsonify(
+            {
+                "crop": crop_name,
+                "confidence": confidence,
+                "icon": icon,
+                "yield_tha": yield_tha,
+                "yield_hgha": yield_hgha,
+                "reg_crop": reg_crop,
+                "status": "ok",
+            }
+        )
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
 

@@ -9,6 +9,7 @@ Ces règles sont la source de vérité unique, utilisées par :
   - test_completeness.py / test_validity.py / test_consistency.py
   - contract_validator.py (via data_contracts.yml, généré à partir de ce fichier)
 """
+
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple, Any
 
@@ -16,7 +17,7 @@ from typing import Optional, List, Tuple, Any
 @dataclass
 class ColumnSpec:
     name: str
-    dtype: str                      # "int", "float", "str"
+    dtype: str  # "int", "float", "str"
     nullable: bool = False
     min_value: Optional[float] = None
     max_value: Optional[float] = None
@@ -57,11 +58,22 @@ YIELD_SCHEMA = DatasetSchema(
         ColumnSpec("Element Code", "int"),
         ColumnSpec("Element", "str", allowed_values=["Yield"]),
         ColumnSpec("Item Code", "int"),
-        ColumnSpec("Item", "str", allowed_values=[
-            "Maize", "Potatoes", "Rice, paddy", "Wheat", "Sorghum",
-            "Soybeans", "Cassava", "Yams", "Sweet potatoes",
-            "Plantains and others",
-        ]),
+        ColumnSpec(
+            "Item",
+            "str",
+            allowed_values=[
+                "Maize",
+                "Potatoes",
+                "Rice, paddy",
+                "Wheat",
+                "Sorghum",
+                "Soybeans",
+                "Cassava",
+                "Yams",
+                "Sweet potatoes",
+                "Plantains and others",
+            ],
+        ),
         ColumnSpec("Year Code", "int", min_value=1961, max_value=2016),
         ColumnSpec("Year", "int", min_value=1961, max_value=2016),
         ColumnSpec("Unit", "str", allowed_values=["hg/ha"]),
@@ -73,10 +85,28 @@ YIELD_SCHEMA = DatasetSchema(
 # Schéma : Crop_recommendation.csv (Kaggle)
 # --------------------------------------------------------------------------
 CROP_LABELS = [
-    "rice", "maize", "chickpea", "kidneybeans", "pigeonpeas", "mothbeans",
-    "mungbean", "blackgram", "lentil", "pomegranate", "banana", "mango",
-    "grapes", "watermelon", "muskmelon", "apple", "orange", "papaya",
-    "coconut", "cotton", "jute", "coffee",
+    "rice",
+    "maize",
+    "chickpea",
+    "kidneybeans",
+    "pigeonpeas",
+    "mothbeans",
+    "mungbean",
+    "blackgram",
+    "lentil",
+    "pomegranate",
+    "banana",
+    "mango",
+    "grapes",
+    "watermelon",
+    "muskmelon",
+    "apple",
+    "orange",
+    "papaya",
+    "coconut",
+    "cotton",
+    "jute",
+    "coffee",
 ]
 
 CROP_SCHEMA = DatasetSchema(

@@ -5,7 +5,6 @@ Critère d'acceptation 1 : COMPLÉTUDE
 - Aucune valeur manquante (NaN/null) sur les colonnes obligatoires
 - Volume de données minimum respecté (pas de fichier tronqué)
 """
-import pytest
 
 
 # ---------------------------------------------------------------------------

@@ -28,7 +28,7 @@ class JSONFormatter(logging.Formatter):
 
 def setup_monitoring(app):
     """Configure le monitoring sur l'application FastAPI."""
-    
+
     # Logger structuré
     handler = logging.StreamHandler()
     handler.setFormatter(JSONFormatter())
@@ -43,10 +43,10 @@ def setup_monitoring(app):
     @app.middleware("http")
     async def log_requests(request: Request, call_next):
         start = time.time()
-        
+
         response = await call_next(request)
         duration = time.time() - start
-        
+
         logger.info(
             "Request processed",
             extra={
@@ -55,7 +55,7 @@ def setup_monitoring(app):
                 "status_code": response.status_code,
                 "duration_ms": round(duration * 1000, 2),
                 "client": request.client.host if request.client else "unknown",
-            }
+            },
         )
         return response
 

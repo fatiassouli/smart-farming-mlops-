@@ -2,9 +2,9 @@
 import pickle
 import joblib
 
-print("="*60)
+print("=" * 60)
 print("🔍 TEST DE CHARGEMENT DES MODÈLES")
-print("="*60)
+print("=" * 60)
 
 # Tester avec pickle
 print("\n📂 Test avec pickle...")
@@ -36,4 +36,4 @@ try:
 except Exception as e:
     print(f"   ❌ Erreur joblib: {e}")
 
-print("\n" + "="*60)
+print("\n" + "=" * 60)

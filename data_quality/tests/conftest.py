@@ -3,6 +3,7 @@ conftest.py
 Fixtures pytest partagées par toute la suite de tests de qualité des données.
 Toutes les dépendances (chemins, DataFrames, schémas) sont centralisées ici.
 """
+
 import os
 import sys
 import pandas as pd
@@ -70,4 +71,4 @@ def yield_schema():
 
 @pytest.fixture(scope="session")
 def crop_schema():
-    return CROP_SCHEMA# trigger rerun
+    return CROP_SCHEMA  # trigger rerun

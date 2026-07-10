@@ -6,8 +6,6 @@ Critère d'acceptation 3 : COHÉRENCE
 - Cohérence référentielle (mapping code <-> libellé stable)
 - Cohérence de la distribution attendue (classes équilibrées)
 """
-import pandas as pd
-import pytest
 
 
 # ---------------------------------------------------------------------------
@@ -24,17 +22,15 @@ def test_yield_constant_columns(yield_df, yield_schema):
 
 def test_yield_year_equals_year_code(yield_df):
     mismatched = yield_df[yield_df["Year"] != yield_df["Year Code"]]
-    assert mismatched.empty, (
-        f"yield.csv : {len(mismatched)} lignes où 'Year' != 'Year Code'"
-    )
+    assert (
+        mismatched.empty
+    ), f"yield.csv : {len(mismatched)} lignes où 'Year' != 'Year Code'"
 
 
 def test_yield_no_duplicate_key(yield_df, yield_schema):
     key_cols = list(yield_schema.unique_key)
     n_dup = yield_df.duplicated(subset=key_cols).sum()
-    assert n_dup == 0, (
-        f"yield.csv : {n_dup} doublons détectés sur la clé {key_cols}"
-    )
+    assert n_dup == 0, f"yield.csv : {n_dup} doublons détectés sur la clé {key_cols}"
 
 
 def test_yield_area_code_area_mapping_stable(yield_df):
@@ -61,7 +57,9 @@ def test_yield_item_code_item_mapping_stable(yield_df):
 # ---------------------------------------------------------------------------
 def test_crop_no_full_duplicate_rows(crop_df):
     n_dup = crop_df.duplicated().sum()
-    assert n_dup == 0, f"Crop_recommendation.csv : {n_dup} lignes strictement dupliquées"
+    assert (
+        n_dup == 0
+    ), f"Crop_recommendation.csv : {n_dup} lignes strictement dupliquées"
 
 
 def test_crop_classes_are_balanced(crop_df, crop_schema):
@@ -83,4 +81,6 @@ def test_crop_all_labels_present(crop_df, crop_schema):
     expected_labels = set(crop_schema.get("label").allowed_values)
     actual_labels = set(crop_df["label"].unique())
     missing = expected_labels - actual_labels
-    assert not missing, f"Crop_recommendation.csv : cultures absentes du fichier : {missing}"
+    assert (
+        not missing
+    ), f"Crop_recommendation.csv : cultures absentes du fichier : {missing}"

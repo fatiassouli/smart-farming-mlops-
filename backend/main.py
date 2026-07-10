@@ -16,6 +16,7 @@ Documentation interactive générée automatiquement :
     http://localhost:8000/docs   (Swagger)
     http://localhost:8000/redoc  (Redoc)
 """
+
 import logging
 import sys
 from pathlib import Path

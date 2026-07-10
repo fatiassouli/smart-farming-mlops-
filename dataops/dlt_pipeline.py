@@ -51,24 +51,16 @@ print("Yield shape:", yield_df.shape)
 # DLT PIPELINE
 # =========================
 pipeline = dlt.pipeline(
-    pipeline_name="smart_farming_pipeline",
-    destination="duckdb",
-    dataset_name="sf_data"
+    pipeline_name="smart_farming_pipeline", destination="duckdb", dataset_name="sf_data"
 )
 
 
 # =========================
 # RESOURCES
 # =========================
-crop_resource = dlt.resource(
-    crop_df.to_dict(orient="records"),
-    name=CROP_TABLE
-)
+crop_resource = dlt.resource(crop_df.to_dict(orient="records"), name=CROP_TABLE)
 
-yield_resource = dlt.resource(
-    yield_df.to_dict(orient="records"),
-    name=YIELD_TABLE
-)
+yield_resource = dlt.resource(yield_df.to_dict(orient="records"), name=YIELD_TABLE)
 
 
 # =========================
@@ -101,4 +93,3 @@ print("\n📌 Sample crop :")
 print(conn.execute("SELECT * FROM sf_data.crop_recommendation LIMIT 5").fetchdf())
 
 conn.close()
-

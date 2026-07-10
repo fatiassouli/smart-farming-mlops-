@@ -9,6 +9,7 @@ Usage :
     python validators/pipeline_validator.py
     python validators/pipeline_validator.py --report path/vers/rapport.json
 """
+
 import argparse
 import datetime
 import json
@@ -58,7 +59,9 @@ def build_report():
     contract_results = run_contract_validation()
 
     all_contracts_valid = all(r["is_valid"] for r in contract_results.values())
-    overall_status = "PASS" if (pytest_result["passed"] and all_contracts_valid) else "FAIL"
+    overall_status = (
+        "PASS" if (pytest_result["passed"] and all_contracts_valid) else "FAIL"
+    )
 
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -81,17 +84,24 @@ def print_summary(report):
     print("-" * 70)
     for dataset_name, result in report["contracts"].items():
         status = "OK" if result["is_valid"] else "ECHEC"
-        print(f"Contrat [{dataset_name}] : {status} "
-              f"({result['n_rows']} lignes, {result['n_violations']} violation(s))")
+        print(
+            f"Contrat [{dataset_name}] : {status} "
+            f"({result['n_rows']} lignes, {result['n_violations']} violation(s))"
+        )
         for v in result["violations"]:
             print(f"    - [{v['rule']}] {v['column']} : {v['detail']}")
     print("=" * 70)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Pipeline de validation qualité des données")
-    parser.add_argument("--report", default=os.path.join(DATA_QUALITY_DIR, "pipeline_report.json"),
-                         help="Chemin du rapport JSON de sortie")
+    parser = argparse.ArgumentParser(
+        description="Pipeline de validation qualité des données"
+    )
+    parser.add_argument(
+        "--report",
+        default=os.path.join(DATA_QUALITY_DIR, "pipeline_report.json"),
+        help="Chemin du rapport JSON de sortie",
+    )
     args = parser.parse_args()
 
     report = build_report()
@@ -99,7 +109,7 @@ def main():
 
     # Créer le dossier du rapport si nécessaire
     os.makedirs(os.path.dirname(args.report), exist_ok=True)
-    
+
     with open(args.report, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     print(f"\nRapport écrit dans : {args.report}")

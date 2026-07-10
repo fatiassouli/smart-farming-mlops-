@@ -1,6 +1,9 @@
 import json
 
-for nb_path in ["notebooks/yield_regression_final.ipynb", "notebooks/yield_regression_executed.ipynb"]:
+for nb_path in [
+    "notebooks/yield_regression_final.ipynb",
+    "notebooks/yield_regression_executed.ipynb",
+]:
     try:
         with open(nb_path, "r", encoding="utf-8") as f:
             nb = json.load(f)

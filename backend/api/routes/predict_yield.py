@@ -14,11 +14,17 @@ router = APIRouter(tags=["Prediction"])
 )
 def predict_yield(payload: YieldRequest):
     if not ml_service.regression_ready:
-        raise HTTPException(status_code=503, detail="Modèle de régression indisponible.")
+        raise HTTPException(
+            status_code=503, detail="Modèle de régression indisponible."
+        )
 
     try:
         yield_tha = ml_service.predict_yield(payload)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Erreur lors de la prédiction : {exc}")
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de la prédiction : {exc}"
+        )
 
-    return YieldResponse(predicted_yield_tha=yield_tha, predicted_yield_kgha=yield_tha * 1000)
+    return YieldResponse(
+        predicted_yield_tha=yield_tha, predicted_yield_kgha=yield_tha * 1000
+    )

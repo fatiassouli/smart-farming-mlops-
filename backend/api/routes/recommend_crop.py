@@ -14,11 +14,15 @@ router = APIRouter(tags=["Recommendation"])
 )
 def recommend_crop(payload: SoilClimateFeatures):
     if not ml_service.classification_ready:
-        raise HTTPException(status_code=503, detail="Modèle de classification indisponible.")
+        raise HTTPException(
+            status_code=503, detail="Modèle de classification indisponible."
+        )
 
     try:
         crop_name, confidence = ml_service.recommend_crop(payload)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Erreur lors de la prédiction : {exc}")
+        raise HTTPException(
+            status_code=500, detail=f"Erreur lors de la prédiction : {exc}"
+        )
 
     return CropResponse(recommended_crop=crop_name, confidence=confidence)

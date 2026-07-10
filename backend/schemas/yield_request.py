@@ -10,9 +10,13 @@ class YieldRequest(BaseModel):
     """
 
     model_config = ConfigDict(
-        json_schema_extra={"example": {"area": "Morocco", "item": "Wheat", "year": 2020}}
+        json_schema_extra={
+            "example": {"area": "Morocco", "item": "Wheat", "year": 2020}
+        }
     )
 
     area: str = Field(..., description="Région / pays", examples=["Morocco"])
     item: str = Field(..., description="Culture concernée", examples=["Wheat"])
-    year: int = Field(..., description="Année de la prédiction", ge=1961, le=2030, examples=[2020])
+    year: int = Field(
+        ..., description="Année de la prédiction", ge=1961, le=2030, examples=[2020]
+    )

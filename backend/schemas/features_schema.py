@@ -24,6 +24,10 @@ class SoilClimateFeatures(BaseModel):
     P: float = Field(..., description="Teneur en phosphore du sol", ge=0, examples=[42])
     K: float = Field(..., description="Teneur en potassium du sol", ge=0, examples=[43])
     temperature: float = Field(..., description="Température en °C", examples=[20.87])
-    humidity: float = Field(..., description="Humidité relative en %", ge=0, le=100, examples=[82.0])
+    humidity: float = Field(
+        ..., description="Humidité relative en %", ge=0, le=100, examples=[82.0]
+    )
     ph: float = Field(..., description="pH du sol", ge=0, le=14, examples=[6.5])
-    rainfall: float = Field(..., description="Précipitations en mm", ge=0, examples=[202.9])
+    rainfall: float = Field(
+        ..., description="Précipitations en mm", ge=0, examples=[202.9]
+    )
