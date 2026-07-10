@@ -17,10 +17,7 @@ jobs:
       - run: |
           pip install -r backend/requirements.txt
           pip install pytest pytest-cov
-      
-      # Si tests/ existe, les lancer
-      - name: Run pytest (si tests existent)
-        run: |
+      - run: |
           if [ -d "tests" ] && [ "$(ls -A tests/*.py 2>/dev/null)" ]; then
             pytest tests/ -v --cov=src --cov-report=xml
           else
@@ -29,7 +26,6 @@ jobs:
             echo "def test_placeholder(): assert True" > tests/test_placeholder.py
             pytest tests/ -v
           fi
-      
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -37,11 +33,34 @@ jobs:
         continue-on-error: true
 
   # ═══════════════════════════════════════════════════════
-  # TEST DU MODÈLE (utilise mlops/model_loader.py)
+  # DATA QUALITY (avant model-test)
+  # ═══════════════════════════════════════════════════════
+  data-quality:
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas pyyaml pytest
+      - name: Run Data Quality Pipeline
+        run: |
+          cd data_quality
+          python validators/pipeline_validator.py --report pipeline_report.json
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-quality-report
+          path: data_quality/pipeline_report.json
+        continue-on-error: true
+
+  # ═══════════════════════════════════════════════════════
+  # MODEL TEST (après data-quality)
   # ═══════════════════════════════════════════════════════
   model-test:
     runs-on: ubuntu-latest
-    needs: [unit-tests]
+    needs: [data-quality]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -50,38 +69,19 @@ jobs:
       - run: |
           pip install -r backend/requirements.txt
           pip install scikit-learn joblib numpy pandas
-      
-      - name: Test chargement modèles (model_loader.py)
+      - name: Test chargement modèles
         run: |
           cd mlops
           python model_loader.py
-      
-      - name: Test log models (log_models.py)
+      - name: Test log models
         run: |
           cd mlops
           python log_models.py
         continue-on-error: true
 
-  data-quality:
-    runs-on: ubuntu-latest
-    needs: [model-test]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install pandas pyyaml
-      - run: |
-          cd data_quality
-          python validators/pipeline_validator.py --report pipeline_report.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: data-quality-report
-          path: data_quality/pipeline_report.json
-
   dagster-pipeline:
     runs-on: ubuntu-latest
-    needs: [data-quality]
+    needs: [model-test]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
