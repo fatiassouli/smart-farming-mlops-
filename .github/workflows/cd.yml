@@ -15,14 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
-      
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT }}  # ← Utilise GHCR_PAT au lieu de GITHUB_TOKEN
-      
+          password: ${{ secrets.GHCR_PAT }}
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -32,6 +32,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -42,8 +43,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /opt/smart-farming
-            docker pull ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
-            docker-compose up -d api
+            cd /home/ubuntu/smart-farming-mlops-
+            git pull origin main
+            docker-compose build api app
+            docker-compose up -d api app
             docker system prune -f
             echo "✅ Déployé !"
