@@ -39,10 +39,11 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          command_timeout: 25m
           script: |
             cd /home/ubuntu/smart-farming-mlops-
             git pull origin main
             sudo docker compose build api app
             sudo docker compose up -d api app
-            sudo docker system prune -f
+            sudo docker image prune -f
             echo "✅ Déployé !"
