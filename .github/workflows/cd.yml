@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile.app   # adapte au vrai chemin du Dockerfile de "app"
+          file: ./Dockerfile
           push: true
           cache-from: type=gha,scope=app
           cache-to: type=gha,mode=max,scope=app
