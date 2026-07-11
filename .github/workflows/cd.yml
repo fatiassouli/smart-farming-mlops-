@@ -1,14 +1,11 @@
 name: CD
-
 on:
   push:
     branches: [main]
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: smart-farming-api
   OWNER: outighli
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -33,9 +30,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -47,7 +43,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /opt/smart-farming
-            docker pull ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest
+            docker pull ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
             docker-compose up -d api
             docker system prune -f
             echo "✅ Déployé !"
