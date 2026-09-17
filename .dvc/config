@@ -1,0 +1,4 @@
+[core]
+    remote = local
+['remote "local"']
+    url = C:\Users\hp\OneDrive\Bureau\s8\MLOPS\smart-farming-mlops\dvc-storage

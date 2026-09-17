@@ -15,10 +15,10 @@
 | **Labels** | data-engineering, sprint-1 |
 
 **Critères d'acceptation :**
-- [ ] Script dlt pour Crop_recommendation.csv
-- [ ] Script dlt pour yield.csv
-- [ ] Données chargées dans DuckDB
-- [ ] Pipeline fonctionnel
+- [x] Script dlt pour Crop_recommendation.csv
+- [x] Script dlt pour yield.csv
+- [x] Données chargées dans DuckDB
+- [x] Pipeline fonctionnel
 
 ---
 
@@ -33,10 +33,10 @@
 | **Labels** | data-engineering, sprint-1 |
 
 **Critères d'acceptation :**
-- [ ] Base DuckDB créée
-- [ ] Schéma défini
-- [ ] Données accessibles via connection
-- [ ] Requêtes SQL fonctionnelles
+- [x] Base DuckDB créée
+- [x] Schéma défini
+- [x] Données accessibles via connection
+- [x] Requêtes SQL fonctionnelles
 
 ---
 
