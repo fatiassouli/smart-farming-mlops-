@@ -224,4 +224,4 @@ __marimo__/
 data/warehouse/
 *.duckdb
 .venv/
-__pycache__/
+__pycache__/dvc-storage/
